@@ -24,7 +24,7 @@ final class RMTabBarController: UITabBarController {
         var navigationControllers : [UINavigationController] = []
         let tabBarViewControllers : [TabBarViewControllers] = TabBarViewControllers.allCases
         for (index, controller) in  arrayOfViewControllers.enumerated() {
-            controller.navigationItem.largeTitleDisplayMode = .always
+            controller.navigationItem.largeTitleDisplayMode = .automatic
             let navigationController = UINavigationController(rootViewController: controller)
             navigationController.navigationBar.tintColor = .label
             navigationController.tabBarItem = UITabBarItem(title: tabBarViewControllers[index].title, image: tabBarViewControllers[index].image, tag: index)

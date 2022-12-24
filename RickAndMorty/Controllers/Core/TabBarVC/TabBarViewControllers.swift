@@ -18,13 +18,13 @@ enum TabBarViewControllers : CaseIterable {
         
         switch self {
         case .character:
-            image = UIImage(named: "")
+            image = UIImage(systemName: "person")
         case .location:
-            image = UIImage(named: "")
+            image = UIImage(systemName: "globe")
         case .episode:
-            image = UIImage(named: "")
+            image = UIImage(systemName: "tv")
         case .settings:
-            image = UIImage(named: "")
+            image = UIImage(systemName: "gear")
         }
         
         return image
