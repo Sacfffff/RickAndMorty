@@ -8,7 +8,7 @@
 import Foundation
 
 /// Type of HTTP Request
-enum HTTPRequest : String {
+enum HTTPMethod : String {
     case get = "GET"
 }
 
@@ -26,7 +26,7 @@ final class RMRequest {
     private let endpoint : RMEndpoint
     
     /// Path Components for API, if any
-    private let pathComponents : Set<String>
+    private let pathComponents : [String]
     
     /// Query arguments for API, if any
     private let queryParameters : [URLQueryItem]
@@ -55,11 +55,12 @@ final class RMRequest {
         return string
     }
     
-    
     /// Computed and constructed url
     public var url : URL? {
         return URL(string: urlString)
     }
+    
+    public let httpMethod : HTTPMethod = .get
     
     
     /// Construct request
@@ -67,7 +68,7 @@ final class RMRequest {
     ///   - endpoint:Ttarget endpoint
     ///   - pathComponents: collection of the path components
     ///   - queryParameters: collection of quary parameters
-    public init(endpoint: RMEndpoint, pathComponents: Set<String> = [], queryParameters: [URLQueryItem] = []) {
+    public init(endpoint: RMEndpoint, pathComponents: [String] = [], queryParameters: [URLQueryItem] = []) {
         self.endpoint = endpoint
         self.pathComponents = pathComponents
         self.queryParameters = queryParameters
