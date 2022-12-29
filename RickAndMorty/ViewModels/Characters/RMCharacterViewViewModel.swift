@@ -35,8 +35,8 @@ extension RMCharacterViewViewModel {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .systemPink
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharactersCollectionViewCell.self)", for: indexPath) as? RMCharactersCollectionViewCell else { return .init() }
+        cell.apply(viewModel: RMCharactersCollectionViewCellViewModel(characterName: "fjfj", characterStatus: .alive, characterImageURL: nil))
         return cell
     }
 }

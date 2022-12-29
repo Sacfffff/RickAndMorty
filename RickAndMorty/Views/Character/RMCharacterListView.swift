@@ -9,7 +9,7 @@ import UIKit
 
 
 /// View that handles showing list of characters, loader, ets.
-final class CharacterListView: UIView {
+final class RMCharacterListView: UIView {
 
     private let viewModel : RMCharacterViewViewModelProtocol = RMCharacterViewViewModel()
     
@@ -43,7 +43,7 @@ final class CharacterListView: UIView {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         collectionView.collectionViewLayout = layout
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(RMCharactersCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharactersCollectionViewCell.self)")
         collectionView.isHidden = true
         collectionView.alpha = 0
         collectionView.dataSource = viewModel
@@ -68,8 +68,8 @@ final class CharacterListView: UIView {
                 //spinner
                 spinner.widthAnchor.constraint(equalToConstant: 100.0),
                 spinner.heightAnchor.constraint(equalToConstant: 100.0),
-                spinner.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-                spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+                spinner.centerXAnchor.constraint(equalTo: centerXAnchor),
+                spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
                 
                 //collectionView
                 collectionView.topAnchor.constraint(equalTo: topAnchor),
