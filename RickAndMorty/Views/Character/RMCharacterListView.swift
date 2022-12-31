@@ -48,10 +48,12 @@ final class RMCharacterListView: UIView {
         collectionView.alpha = 0
         collectionView.dataSource = viewModel
         collectionView.delegate = viewModel
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) { [weak self] in
+        
+        viewModel.reloadData = { [weak self] in
             self?.spinner.stopAnimating()
-            
+            self?.collectionView.reloadData()
             self?.collectionView.isHidden = false
+            
             UIView.animate(withDuration: 0.4) {
                 self?.collectionView.alpha = 1
             }

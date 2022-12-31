@@ -23,7 +23,7 @@ final class RMCharactersCollectionViewCellViewModel {
     }
     
     var characterStatusText : String {
-        characterStatus.rawValue
+        "Status: \(characterStatus.text)"
     }
     
     func fetchImage(completion: @escaping (Result<Data, Error>) -> Void) {
