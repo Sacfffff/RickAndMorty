@@ -17,12 +17,19 @@ final class RMCharacterViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Characters"
         
-        view.addSubview(characterListView)
+        setup()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setupConstraints()
+    }
+    
+    private func setup() {
+        
+        characterListView.delegate = self
+        view.addSubview(characterListView)
+        
     }
     
     private func setupConstraints() {
@@ -36,5 +43,18 @@ final class RMCharacterViewController: UIViewController {
                 characterListView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
                 
             ])
+    }
+}
+
+//MARK: - extension RMCharacterViewController : RMCharacterListViewDelegate
+
+extension RMCharacterViewController : RMCharacterListViewDelegate {
+    
+    func rmCharacterListView(_ characterListView: RMCharacterListView, didSelectCharacter character: RMCharacter) {
+        
+        let viewModel = RMCharacterDetailViewModel(character: character)
+        let detailVc = RMCharacterDetailViewController(viewModel: viewModel)
+        
+        navigationController?.pushViewController(detailVc, animated: true)
     }
 }

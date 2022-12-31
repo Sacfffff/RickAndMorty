@@ -8,8 +8,15 @@
 import UIKit
 
 
+protocol RMCharacterListViewDelegate : AnyObject {
+    
+    func rmCharacterListView(_ characterListView: RMCharacterListView, didSelectCharacter character: RMCharacter)
+}
+
 /// View that handles showing list of characters, loader, ets.
 final class RMCharacterListView: UIView {
+    
+    var delegate : RMCharacterListViewDelegate?
 
     private let viewModel : RMCharacterViewViewModelProtocol = RMCharacterViewViewModel()
     
@@ -40,7 +47,7 @@ final class RMCharacterListView: UIView {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
         collectionView.collectionViewLayout = layout
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(RMCharactersCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharactersCollectionViewCell.self)")
@@ -56,6 +63,12 @@ final class RMCharacterListView: UIView {
             
             UIView.animate(withDuration: 0.4) {
                 self?.collectionView.alpha = 1
+            }
+        }
+        
+        viewModel.didSelectCharacter = { [weak self] character in
+            if let self {
+                self.delegate?.rmCharacterListView(self, didSelectCharacter: character)
             }
         }
         

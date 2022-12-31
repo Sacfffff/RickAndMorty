@@ -7,16 +7,26 @@
 
 import UIKit
 
-protocol RMCharacterViewViewModelProtocol : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+protocol RMCharacterViewViewModelProtocol : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     
     var reloadData : (()->Void)? {get set}
+    var didSelectCharacter : ((RMCharacter)->Void)? {get set}
+    
+    var shouldShowMoreIndicator : Bool {get}
+    
     func getAllCharacters()
     
 }
 
+/// View Model to hundle character list view logic
 final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtocol {
     
     var reloadData: (() -> Void)?
+    var didSelectCharacter : ((RMCharacter)->Void)?
+    
+    var shouldShowMoreIndicator : Bool {
+        apiInfo?.next != nil
+    }
     
     private var characters : [RMCharacter] = [] {
         didSet {
@@ -27,7 +37,9 @@ final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtoco
         }
     }
     private var cellViewModel : [RMCharactersCollectionViewCellViewModel] = []
+    private var apiInfo : RMGetAllCharactersResponceInfo?
     
+    /// Fetch initial set of characters(20)
     func getAllCharacters() {
         RMService.shared.execute(RMService.listOfCharactersRequests, expecting: RMGetAllCharactersResponce.self) { [weak self] result in
             
@@ -36,15 +48,22 @@ final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtoco
                 print(error)
             case .success(let responceModel):
                 self?.characters = responceModel.results
+                self?.apiInfo = responceModel.info
                 DispatchQueue.main.async {
                     self?.reloadData?()
                 }
             }
         }
     }
+    
+    /// Paginate if additional characters are needed
+    func getAdditionalCharacters () {
+        
+    }
+    
 }
 
-//MARK: - extension CharacterListView : UICollectionViewDataSource
+//MARK: - extension RMCharacterViewViewModel : UICollectionViewDataSource
 extension RMCharacterViewViewModel {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -59,7 +78,7 @@ extension RMCharacterViewViewModel {
 }
 
 
-//MARK: - extension CharacterListView : UICollectionViewDelegateFlowLayout
+//MARK: - extension RMCharacterViewViewModel : UICollectionViewDelegateFlowLayout
 extension RMCharacterViewViewModel {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -71,7 +90,21 @@ extension RMCharacterViewViewModel {
 }
 
 
-//MARK: - extension CharacterListView : UICollectionViewDelegate
+//MARK: - extension RMCharacterViewViewModel : UICollectionViewDelegate
 extension RMCharacterViewViewModel {
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let character = characters[indexPath.row]
+        didSelectCharacter?(character)
+    }
+    
+}
+
+//MARK: - extension RMCharacterViewViewModel : UIScrollViewDelegate
+extension RMCharacterViewViewModel {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard shouldShowMoreIndicator else { return }
+    }
 }
