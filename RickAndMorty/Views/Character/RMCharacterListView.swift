@@ -51,6 +51,7 @@ final class RMCharacterListView: UIView {
         collectionView.collectionViewLayout = layout
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(RMCharactersCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharactersCollectionViewCell.self)")
+        collectionView.register(RMFooterLoadingCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "\(RMFooterLoadingCollectionReusableView.self)")
         collectionView.isHidden = true
         collectionView.alpha = 0
         collectionView.dataSource = viewModel
