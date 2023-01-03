@@ -11,6 +11,7 @@ protocol RMCharacterViewViewModelProtocol : UICollectionViewDataSource, UICollec
     
     var reloadData : (()->Void)? {get set}
     var didSelectCharacter : ((RMCharacter)->Void)? {get set}
+    var didLoadMoreCharacters : (([IndexPath]) -> Void)? {get set}
     
     var shouldShowLoadMoreIndicator : Bool {get}
     
@@ -23,6 +24,7 @@ final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtoco
     
     var reloadData: (() -> Void)?
     var didSelectCharacter : ((RMCharacter)->Void)?
+    var didLoadMoreCharacters : (([IndexPath]) -> Void)?
     
     var shouldShowLoadMoreIndicator : Bool {
         apiInfo?.next != nil
@@ -32,7 +34,10 @@ final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtoco
         didSet {
            characters.forEach{
               let model =  RMCharactersCollectionViewCellViewModel(characterName: $0.name, characterStatus: $0.status, characterImageURL: URL(string: $0.image))
-               cellViewModel.append(model)
+               
+               if !cellViewModel.contains(model) {
+                   cellViewModel.append(model)
+               }
             }
         }
     }
@@ -58,9 +63,41 @@ final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtoco
     }
     
     /// Paginate if additional characters are needed
-    func getAdditionalCharacters () {
+    func getAdditionalCharacters(url: URL) {
+        
+        guard !isLoadingMoreCharacters else { return }
         
         isLoadingMoreCharacters = true
+        
+        guard let request = RMRequest(url: url) else {
+            isLoadingMoreCharacters = false
+            return
+        }
+        
+        RMService.shared.execute(request, expecting: RMGetAllCharactersResponce.self) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+                
+            case .success(let model):
+                let moreResults = model.results
+                self.apiInfo = model.info
+                
+                let newCount = moreResults.count
+                let total = self.characters.count + newCount
+                let startingIndex = total - newCount
+                let indexPathsToAdd : [IndexPath] = Array(startingIndex..<(startingIndex + newCount))
+                    .compactMap{ IndexPath(row: $0, section: 0) }
+                self.characters.append(contentsOf: moreResults)
+                
+                DispatchQueue.main.async {
+                    self.didLoadMoreCharacters?(indexPathsToAdd)
+                }
+                 self.isLoadingMoreCharacters = false
+            case .failure(let error):
+                self.isLoadingMoreCharacters = false
+            }
+        }
         
     }
     
@@ -123,16 +160,24 @@ extension RMCharacterViewViewModel {
 extension RMCharacterViewViewModel {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard shouldShowLoadMoreIndicator, !isLoadingMoreCharacters else { return }
+        guard shouldShowLoadMoreIndicator,
+              !isLoadingMoreCharacters,
+              !cellViewModel.isEmpty,
+              let nextUrlString = apiInfo?.next,
+              let url = URL(string: nextUrlString) else { return }
         
-        let offset = scrollView.contentOffset.y
-        let totalContentHeight = scrollView.contentSize.height
-        let totalScrollViewFixedHeight = scrollView.frame.size.height
-        let footerHeightPlusBuffer : CGFloat = 120
-        
-        if offset >= (totalContentHeight - totalScrollViewFixedHeight - footerHeightPlusBuffer) {
-            getAdditionalCharacters()
-           
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] t in
+            let offset = scrollView.contentOffset.y
+            let totalContentHeight = scrollView.contentSize.height
+            let totalScrollViewFixedHeight = scrollView.frame.size.height
+            let footerHeightPlusBuffer : CGFloat = 120
+            
+            if offset >= (totalContentHeight - totalScrollViewFixedHeight - footerHeightPlusBuffer) {
+                self?.getAdditionalCharacters(url: url)
+               
+            }
+            
+            t.invalidate()
         }
     }
 }

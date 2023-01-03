@@ -57,6 +57,13 @@ final class RMCharacterListView: UIView {
         collectionView.dataSource = viewModel
         collectionView.delegate = viewModel
         
+        setupViewModel()
+        
+        addSubviews(collectionView, spinner)
+    }
+    
+    private func setupViewModel() {
+        
         viewModel.reloadData = { [weak self] in
             self?.spinner.stopAnimating()
             self?.collectionView.reloadData()
@@ -73,9 +80,12 @@ final class RMCharacterListView: UIView {
             }
         }
         
-        addSubviews(collectionView, spinner)
+        viewModel.didLoadMoreCharacters = { [weak self] newIndexPaths in
+            self?.collectionView.performBatchUpdates({
+                self?.collectionView.insertItems(at: newIndexPaths)
+            })
+        }
     }
-    
 
     private func setupConstraints() {
         
