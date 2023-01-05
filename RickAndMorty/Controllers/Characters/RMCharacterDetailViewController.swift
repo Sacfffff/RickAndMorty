@@ -12,9 +12,11 @@ class RMCharacterDetailViewController: UIViewController {
 
     private var viewModel : RMCharacterDetailViewModelProtocol
     
+    private let detailView : RMCharacterDetailView
+    
     init(viewModel: RMCharacterDetailViewModelProtocol) {
-        
         self.viewModel = viewModel
+        detailView = RMCharacterDetailView(frame: .zero, viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
         
     }
@@ -26,12 +28,73 @@ class RMCharacterDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .secondarySystemBackground
-        title = viewModel.title
-        navigationItem.largeTitleDisplayMode = .never
+        setupView()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        setupConstraints()
+    }
 
+    private func setupView() {
+        
+        view.backgroundColor = .secondarySystemBackground
+        title = viewModel.title
+        
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didTapShare))
+        
+        detailView.colectionView?.delegate = self
+        detailView.colectionView?.dataSource = self
+        view.addSubview(detailView)
+        
+    }
     
+    
+    @objc private func didTapShare() {
+        
+        
+    }
+    
+    private func setupConstraints() {
+        
+        NSLayoutConstraint.activate(
+            [
+                //detailView
+                detailView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                detailView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                detailView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+                detailView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+                
+            ])
+    }
 
+}
+
+//MARK: - extension UICollectionViewDelegate
+
+extension RMCharacterDetailViewController : UICollectionViewDelegate {
+    
+}
+
+//MARK: - extension UICollectionViewDataSource
+extension RMCharacterDetailViewController : UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        viewModel.sections.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        cell.backgroundColor = .systemPink
+        return cell
+    }
+    
+    
 }

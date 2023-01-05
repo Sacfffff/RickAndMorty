@@ -94,7 +94,7 @@ final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtoco
                     self.didLoadMoreCharacters?(indexPathsToAdd)
                 }
                  self.isLoadingMoreCharacters = false
-            case .failure(let error):
+            case .failure(_):
                 self.isLoadingMoreCharacters = false
             }
         }
