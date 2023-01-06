@@ -86,7 +86,19 @@ extension RMCharacterDetailViewController : UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        let items : Int
+        
+        switch viewModel.sections[section] {
+           
+        case .photo:
+            items = 1
+        case .information:
+            items = 3
+        case .episodes:
+            items = 10
+        }
+        
+        return items
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
