@@ -8,10 +8,11 @@
 import UIKit
 
 
-enum SectionType  : CaseIterable {
-    case photo
-    case information
-    case episodes
+enum SectionType {
+    
+    case photo(viewModel: RMCharacterPhotoCellViewModelProtocol)
+    case information(viewModel: [RMCharacterInfoCellViewModelProtocol])
+    case episodes(viewModel: [RMCharacterEpisodeCellViewModelProtocol])
 }
 
 protocol RMCharacterDetailViewModelProtocol {
@@ -26,7 +27,7 @@ protocol RMCharacterDetailViewModelProtocol {
 
 final class RMCharacterDetailViewModel : RMCharacterDetailViewModelProtocol {
     
-    var sections : [SectionType] = SectionType.allCases
+    var sections : [SectionType] = []
     
     var title : String {
         character.name.uppercased()
@@ -40,8 +41,31 @@ final class RMCharacterDetailViewModel : RMCharacterDetailViewModelProtocol {
     
     init(character: RMCharacter) {
         self.character = character
+        setupSections()
     }
     
+    
+    private func setupSections() {
+        
+        sections =
+        [
+            .photo(viewModel: RMCharacterPhotoCellViewModel(imageURL: URL(string: character.image))),
+            .information(viewModel:
+            [
+                RMCharacterInfoCellViewModel(value: character.status.rawValue, title: "Status"),
+                RMCharacterInfoCellViewModel(value: character.gender.rawValue, title: "Gender"),
+                RMCharacterInfoCellViewModel(value: character.type, title: "Type"),
+                RMCharacterInfoCellViewModel(value: character.species, title: "Species"),
+                RMCharacterInfoCellViewModel(value: character.origin.name, title: "Origin"),
+                RMCharacterInfoCellViewModel(value: character.location.name, title: "Location"),
+                RMCharacterInfoCellViewModel(value: character.created, title: "Created"),
+                RMCharacterInfoCellViewModel(value: "\(character.episode.count)", title: "Total Episodes"),
+                
+           
+            ]),
+            .episodes(viewModel: character.episode.compactMap{ RMCharacterEpisodeCellViewModel(episodeDataURL: URL(string: $0))})
+        ]
+    }
     
     //MARK: - Layout
     

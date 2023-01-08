@@ -48,7 +48,9 @@ class RMCharacterDetailView: UIView {
             self?.createSectionFor(for: index)
         })
         _collectionView.collectionViewLayout = layout
-        _collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        _collectionView.register(RMCharacterPhotoCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharacterPhotoCollectionViewCell.self)")
+        _collectionView.register(RMCharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharacterInfoCollectionViewCell.self)")
+        _collectionView.register(RMCharacterEpisodeCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharacterEpisodeCollectionViewCell.self)")
         _collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubviews(spinner, _collectionView)

@@ -92,10 +92,10 @@ extension RMCharacterDetailViewController : UICollectionViewDataSource {
            
         case .photo:
             items = 1
-        case .information:
-            items = 3
-        case .episodes:
-            items = 10
+        case .information(let infoModel):
+            items = infoModel.count
+        case .episodes(let episodesModel):
+            items = episodesModel.count
         }
         
         return items
@@ -103,10 +103,22 @@ extension RMCharacterDetailViewController : UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .systemPink
-        return cell
-    }
-    
-    
+        
+        switch viewModel.sections[indexPath.section] {
+           
+        case .photo(let photoModel):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharacterPhotoCollectionViewCell.self)", for: indexPath) as? RMCharacterPhotoCollectionViewCell else { return .init() }
+            cell.configure(with: photoModel)
+            return cell
+        case .information(let infoModel):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharacterInfoCollectionViewCell.self)", for: indexPath) as? RMCharacterInfoCollectionViewCell else { return .init() }
+            cell.configure(with: infoModel[indexPath.row])
+            return cell
+        case .episodes(let episodesModel):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharacterEpisodeCollectionViewCell.self)", for: indexPath) as? RMCharacterEpisodeCollectionViewCell else { return .init() }
+            cell.configure(with: episodesModel[indexPath.row])
+            return cell
+        }
+            
+        }
 }
