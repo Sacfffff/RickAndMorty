@@ -218,10 +218,8 @@
 		6C662A182969A6B1001553EA /* CharacterDetails */ = {
 			isa = PBXGroup;
 			children = (
+				6CD2A17A296C94AC000AFF2E /* Cells */,
 				6C69C4B52966048D00565B3A /* RMCharacterDetailView.swift */,
-				6C662A192969A70A001553EA /* RMCharacterPhotoCollectionViewCell.swift */,
-				6C662A1B2969A71F001553EA /* RMCharacterInfoCollectionViewCell.swift */,
-				6C662A1D2969A732001553EA /* RMCharacterEpisodeCollectionViewCell.swift */,
 			);
 			path = CharacterDetails;
 			sourceTree = "<group>";
@@ -310,6 +308,16 @@
 				6C67F90A295CA968003FA1E7 /* Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6CD2A17A296C94AC000AFF2E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				6C662A1B2969A71F001553EA /* RMCharacterInfoCollectionViewCell.swift */,
+				6C662A1D2969A732001553EA /* RMCharacterEpisodeCollectionViewCell.swift */,
+				6C662A192969A70A001553EA /* RMCharacterPhotoCollectionViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
