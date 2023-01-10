@@ -29,6 +29,7 @@ class RMCharacterEpisodeCollectionViewCell: UICollectionViewCell {
     
     func configure(with viewModel: RMCharacterEpisodeCellViewModelProtocol) {
         
+        
     }
     
     private func setupConstraints() {

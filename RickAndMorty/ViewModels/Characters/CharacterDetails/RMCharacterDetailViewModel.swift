@@ -52,16 +52,14 @@ final class RMCharacterDetailViewModel : RMCharacterDetailViewModelProtocol {
             .photo(viewModel: RMCharacterPhotoCellViewModel(imageURL: URL(string: character.image))),
             .information(viewModel:
             [
-                RMCharacterInfoCellViewModel(value: character.status.rawValue, title: "Status"),
-                RMCharacterInfoCellViewModel(value: character.gender.rawValue, title: "Gender"),
-                RMCharacterInfoCellViewModel(value: character.type, title: "Type"),
-                RMCharacterInfoCellViewModel(value: character.species, title: "Species"),
-                RMCharacterInfoCellViewModel(value: character.origin.name, title: "Origin"),
-                RMCharacterInfoCellViewModel(value: character.location.name, title: "Location"),
-                RMCharacterInfoCellViewModel(value: character.created, title: "Created"),
-                RMCharacterInfoCellViewModel(value: "\(character.episode.count)", title: "Total Episodes"),
-                
-           
+                RMCharacterInfoCellViewModel(value: character.status.rawValue, type: .status),
+                RMCharacterInfoCellViewModel(value: character.gender.rawValue, type: .gender),
+                RMCharacterInfoCellViewModel(value: character.type, type: .personType),
+                RMCharacterInfoCellViewModel(value: character.species, type: .species),
+                RMCharacterInfoCellViewModel(value: character.origin.name, type: .origin),
+                RMCharacterInfoCellViewModel(value: character.location.name, type: .location),
+                RMCharacterInfoCellViewModel(value: character.created, type: .created),
+                RMCharacterInfoCellViewModel(value: "\(character.episode.count)", type: .episodeNumber),
             ]),
             .episodes(viewModel: character.episode.compactMap{ RMCharacterEpisodeCellViewModel(episodeDataURL: URL(string: $0))})
         ]

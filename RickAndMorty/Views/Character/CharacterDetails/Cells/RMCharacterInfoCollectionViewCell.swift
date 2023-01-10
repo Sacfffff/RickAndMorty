@@ -12,7 +12,7 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
     private let titleContainer : UIView = UIView()
     private let value : UILabel = UILabel()
     private let title : UILabel = UILabel()
-    private let icon : UIImageView = UIImageView(image: <#T##UIImage?#>)
+    private let icon : UIImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,8 +34,10 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         
         title.text = nil
+        title.textColor = nil
         value.text = nil
         icon.image = nil
+        icon.tintColor = nil
     }
     
     private func setup() {
@@ -46,6 +48,7 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
         
         value.translatesAutoresizingMaskIntoConstraints = false
         value.font = .systemFont(ofSize: 22, weight: .light)
+        value.numberOfLines = 0
         
         titleContainer.backgroundColor = .secondarySystemBackground
         titleContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -57,14 +60,17 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
         
         icon.translatesAutoresizingMaskIntoConstraints = false
         icon.contentMode = .scaleAspectFit
-        icon.image = UIImage(named: "globe.americas")
         
         contentView.addSubviews(value,titleContainer, icon)
 
     }
     
     func configure(with viewModel: RMCharacterInfoCellViewModelProtocol) {
-        
+        title.text = viewModel.title
+        value.text = viewModel.displayValue
+        icon.image = viewModel.iconImage
+        icon.tintColor = viewModel.tintColor
+        title.textColor = viewModel.tintColor
     }
     
     private func setupConstraints() {
@@ -93,8 +99,8 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
                 //value
                 value.leftAnchor.constraint(equalTo: icon.rightAnchor,constant: 10),
                 value.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
-                value.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 36),
-                value.heightAnchor.constraint(equalToConstant: 30),
+                value.topAnchor.constraint(equalTo: contentView.topAnchor),
+                value.bottomAnchor.constraint(equalTo: titleContainer.topAnchor),
                 
             ])
     }
