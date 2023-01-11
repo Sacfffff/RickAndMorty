@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RMEpisode : Codable {
+struct RMEpisode : Codable, EpisodeDataRendering {
     
     private enum CodingKeys : String, CodingKey {
         case id
