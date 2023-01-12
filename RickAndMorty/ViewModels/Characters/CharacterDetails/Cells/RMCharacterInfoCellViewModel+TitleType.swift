@@ -44,21 +44,21 @@ extension  RMCharacterInfoCellViewModel {
             switch self {
                 
             case .status:
-                imageName = "person"
+                imageName = "person.circle"
             case .personType:
-                imageName = "bell"
+                imageName = "infinity.circle"
             case .species:
-                imageName = "bell"
+                imageName = "globe.europe.africa"
             case .origin:
-                imageName = "bell"
+                imageName = "location.north.line"
             case .gender:
-                imageName = "bell"
+                imageName = "person"
             case .created:
-                imageName = "bell"
+                imageName = "line.2.horizontal.decrease.circle"
             case .location:
-                imageName = "bell"
+                imageName = "location.circle"
             case .episodeNumber:
-                imageName = "bell"
+                imageName = "number.circle"
             }
             
             return UIImage(systemName: imageName)

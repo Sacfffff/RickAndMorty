@@ -19,6 +19,7 @@ protocol RMCharacterDetailViewModelProtocol {
     
     var title : String {get}
     var sections : [SectionType] {get}
+    var episodes : [String] {get}
     
     func createPhotoSectionLayout() -> NSCollectionLayoutSection
     func createInformationSectionLayout() -> NSCollectionLayoutSection
@@ -31,6 +32,10 @@ final class RMCharacterDetailViewModel : RMCharacterDetailViewModelProtocol {
     
     var title : String {
         character.name.uppercased()
+    }
+    
+    var episodes : [String] {
+        character.episode
     }
     
     private var requestURL : URL? {

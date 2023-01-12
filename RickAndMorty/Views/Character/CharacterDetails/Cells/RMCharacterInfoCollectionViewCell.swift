@@ -9,6 +9,9 @@ import UIKit
 
 class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
     
+    private var blurView : UIVisualEffectView = UIVisualEffectView()
+    private let imageView : UIImageView = UIImageView()
+    
     private let titleContainer : UIView = UIView()
     private let value : UILabel = UILabel()
     private let title : UILabel = UILabel()
@@ -26,6 +29,9 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        imageView.frame = contentView.bounds
+        blurView.frame = imageView.bounds
         
         setupConstraints()
     }
@@ -46,6 +52,12 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 8
         contentView.clipsToBounds = true
         
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "info")
+        
+        let blurEffect = UIBlurEffect(style: .regular)
+        blurView.effect = blurEffect
+        
         value.translatesAutoresizingMaskIntoConstraints = false
         value.font = .systemFont(ofSize: 22, weight: .light)
         value.numberOfLines = 0
@@ -61,7 +73,7 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
         icon.translatesAutoresizingMaskIntoConstraints = false
         icon.contentMode = .scaleAspectFit
         
-        contentView.addSubviews(value,titleContainer, icon)
+        contentView.addSubviews(imageView, blurView, value,titleContainer, icon)
 
     }
     

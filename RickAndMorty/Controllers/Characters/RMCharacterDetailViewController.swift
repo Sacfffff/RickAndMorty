@@ -76,6 +76,20 @@ class RMCharacterDetailViewController: UIViewController {
 
 extension RMCharacterDetailViewController : UICollectionViewDelegate {
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        switch viewModel.sections[indexPath.section] {
+           
+        case .photo, .information:
+           break
+        case .episodes:
+            let episodeString = self.viewModel.episodes[indexPath.row]
+            guard let episodeURL =  URL(string: episodeString) else { return }
+            navigationController?.pushViewController(RMEpisodeViewController(url: episodeURL), animated: true)
+            
+        }
+    }
 }
 
 //MARK: - extension UICollectionViewDataSource

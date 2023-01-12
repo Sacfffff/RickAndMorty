@@ -11,7 +11,7 @@ import UIKit
 final class RMTabBarController: UITabBarController {
     
     private var arrayOfViewControllers : [UIViewController] {
-        return [RMCharacterViewController(), RMLocationViewController(),  RMEpisodeViewController(), RMSettingsViewController()]
+        return [RMCharacterViewController(), RMLocationViewController(),  RMEpisodesViewController(), RMSettingsViewController()]
     }
 
     override func viewDidLoad() {
