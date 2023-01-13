@@ -9,12 +9,12 @@ import UIKit
 
 /// View Controller to show details about single episode
 final class RMEpisodeViewController: UIViewController {
-
-    private let url : URL?
     
+    private var viewModel : RMEpisodeViewViewModelProtocol
+
     init(url: URL?){
-        self.url = url
         
+        viewModel = RMEpisodeViewViewModel(url: url)
         super.init(nibName: nil, bundle: nil)
     }
     

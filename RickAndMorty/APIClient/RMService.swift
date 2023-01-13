@@ -14,7 +14,8 @@ final class RMService {
     /// Shared singleton instance
     static let shared = RMService()
     
-    private var canselBag : Set<AnyCancellable> = []
+    private let cacheManager = RMAPICacheManager()
+    
     ///Privatized constructor
     private init () {}
     
@@ -30,18 +31,31 @@ final class RMService {
     ///   - completion: Callback data or error
     public func execute<T: Codable>(_ request: RMRequest, expecting type: T.Type, completion: @escaping (Result<T, Error>) -> Void) {
         
+        if let cacheData = cacheManager.cacheResponse(for: request.endpoint, url: request.url) {
+            
+            do{
+                let result = try JSONDecoder().decode(type.self, from: cacheData)
+                completion(.success(result))
+            }  catch {
+                completion(.failure(error))
+            }
+            return
+        }
+        
         guard let urlRequest = self.request(from: request) else {
             return completion(.failure(RMService.ServiceError.failedToCreateRequest))
             
         }
         
-        URLSession.shared.dataTask(with: urlRequest) { data, _, error in
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] data, _, error in
             guard let data = data, error == nil else {
                 return completion(.failure(error ?? RMService.ServiceError.failedToGetData))
             }
             
             do {
+                
                 let result = try JSONDecoder().decode(type.self, from: data)
+                self?.cacheManager.setResponse(for: request.endpoint, url: request.url, data: data)
                 completion(.success(result))
             }
             catch {
