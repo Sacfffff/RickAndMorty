@@ -32,6 +32,7 @@ final class RMEpisodeViewController: UIViewController {
         
         title = "Episode"
         view.backgroundColor = .systemBackground
+        navigationItem.largeTitleDisplayMode = .never
     }
 
 }

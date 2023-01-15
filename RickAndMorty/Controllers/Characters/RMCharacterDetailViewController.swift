@@ -10,11 +10,11 @@ import UIKit
 /// Controller to show info about single character
 class RMCharacterDetailViewController: UIViewController {
 
-    private var viewModel : RMCharacterDetailViewModelProtocol
+    private var viewModel : RMCharacterDetailViewViewModelProtocol
     
     private let detailView : RMCharacterDetailView
     
-    init(viewModel: RMCharacterDetailViewModelProtocol) {
+    init(viewModel: RMCharacterDetailViewViewModelProtocol) {
         self.viewModel = viewModel
         detailView = RMCharacterDetailView(frame: .zero, viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)

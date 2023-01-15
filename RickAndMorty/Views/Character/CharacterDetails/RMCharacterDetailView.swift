@@ -17,9 +17,9 @@ class RMCharacterDetailView: UIView {
     
     private let spinner : UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     
-    private let viewModel: RMCharacterDetailViewModelProtocol
+    private let viewModel: RMCharacterDetailViewViewModelProtocol
     
-    init(frame: CGRect, viewModel: RMCharacterDetailViewModelProtocol) {
+    init(frame: CGRect, viewModel: RMCharacterDetailViewViewModelProtocol) {
         self.viewModel = viewModel
         super.init(frame: frame)
         

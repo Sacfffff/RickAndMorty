@@ -79,5 +79,6 @@ final class RMService {
 
 extension RMService {
     
-    public static let listOfCharactersRequests : RMRequest = RMRequest(endpoint: .character)
+    public static let listOfCharactersRequest : RMRequest = RMRequest(endpoint: .character)
+    public static let listOfEpisidesRequest : RMRequest = RMRequest(endpoint: .episode)
 }

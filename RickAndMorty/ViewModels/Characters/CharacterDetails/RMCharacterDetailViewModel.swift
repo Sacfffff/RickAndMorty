@@ -15,7 +15,7 @@ enum SectionType {
     case episodes(viewModel: [RMCharacterEpisodeCellViewModelProtocol])
 }
 
-protocol RMCharacterDetailViewModelProtocol {
+protocol RMCharacterDetailViewViewModelProtocol {
     
     var title : String {get}
     var sections : [SectionType] {get}
@@ -26,7 +26,7 @@ protocol RMCharacterDetailViewModelProtocol {
     func createEpisodesSectionLayout() -> NSCollectionLayoutSection
 }
 
-final class RMCharacterDetailViewModel : RMCharacterDetailViewModelProtocol {
+final class RMCharacterDetailViewModel : RMCharacterDetailViewViewModelProtocol {
     
     var sections : [SectionType] = []
     

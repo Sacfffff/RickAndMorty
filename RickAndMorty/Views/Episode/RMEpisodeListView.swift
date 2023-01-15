@@ -1,24 +1,23 @@
 //
-//  CharacterListView.swift
+//  RMEpisodeListView.swift
 //  RickAndMorty
 //
-//  Created by Aleks Kravtsova on 28.12.22.
+//  Created by Aleks Kravtsova on 14.01.23.
 //
 
 import UIKit
 
-
-protocol RMCharacterListViewDelegate : AnyObject {
+protocol RMEpisodeListViewDelegate : AnyObject {
     
-    func rmCharacterListView(_ characterListView: RMCharacterListView, didSelectCharacter character: RMCharacter)
+    func rmEpisodeListViewListView(_ episodeListView: RMEpisodeListView, didSelectEpisode episode: RMEpisode)
 }
 
-/// View that handles showing list of characters, loader, ets.
-final class RMCharacterListView: UIView {
+/// View that handles showing list of epidodes, loader, ets.
+final class RMEpisodeListView: UIView {
     
-    weak var delegate : RMCharacterListViewDelegate?
+    var delegate : RMEpisodeListViewDelegate?
 
-    private let viewModel : RMCharacterViewViewModelProtocol = RMCharacterViewViewModel()
+    private let viewModel : RMEpisodeListViewViewModelProtocol = RMEpisodeListViewViewModel()
     
     private let collectionView : UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     private let spinner : UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
@@ -29,7 +28,7 @@ final class RMCharacterListView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         configureUI()
         spinner.startAnimating()
-        viewModel.getAllCharacters()
+        viewModel.getAllEpisodes()
     }
     
     required init?(coder: NSCoder) {
@@ -50,7 +49,7 @@ final class RMCharacterListView: UIView {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
         collectionView.collectionViewLayout = layout
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(RMCharactersCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharactersCollectionViewCell.self)")
+        collectionView.register(RMCharacterEpisodeCollectionViewCell.self, forCellWithReuseIdentifier: "\(RMCharacterEpisodeCollectionViewCell.self)")
         collectionView.register(RMFooterLoadingCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "\(RMFooterLoadingCollectionReusableView.self)")
         collectionView.isHidden = true
         collectionView.alpha = 0
@@ -74,13 +73,13 @@ final class RMCharacterListView: UIView {
             }
         }
         
-        viewModel.didSelectCharacter = { [weak self] character in
+        viewModel.didSelectEpisode = { [weak self] episode in
             if let self {
-                self.delegate?.rmCharacterListView(self, didSelectCharacter: character)
+                self.delegate?.rmEpisodeListViewListView(self, didSelectEpisode: episode)
             }
         }
         
-        viewModel.didLoadMoreCharacters = { [weak self] newIndexPaths in
+        viewModel.didLoadMoreEpisodes = { [weak self] newIndexPaths in
             self?.collectionView.performBatchUpdates({
                 self?.collectionView.insertItems(at: newIndexPaths)
             })
