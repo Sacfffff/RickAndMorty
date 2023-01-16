@@ -11,6 +11,8 @@ final class RMEpisodeDetailView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        setup()
     }
     
     required init?(coder: NSCoder) {
@@ -21,5 +23,10 @@ final class RMEpisodeDetailView: UIView {
         super.layoutSubviews()
     }
     
+    private func setup() {
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+    }
 
 }

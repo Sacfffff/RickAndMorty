@@ -20,6 +20,7 @@ final class RMEpisodesViewController: UIViewController {
         setup()
     }
     
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setupConstraints()
@@ -29,6 +30,12 @@ final class RMEpisodesViewController: UIViewController {
         
         episodeListView.delegate = self
         view.addSubview(episodeListView)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonDidTap))
+        
+    }
+    
+    @objc private func searchButtonDidTap() {
         
     }
     

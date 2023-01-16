@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
 typealias EpisodeDataRendering = (name: String, airDate: String, episode: String)
 
 protocol RMCharacterEpisodeCellViewModelProtocol {
     
     var update : ((EpisodeDataRendering)->Void)? {get set}
+    var borderColor : UIColor {get}
     
     func getEpisode()
 }
@@ -19,6 +21,10 @@ protocol RMCharacterEpisodeCellViewModelProtocol {
 final class RMCharacterEpisodeCellViewModel : RMCharacterEpisodeCellViewModelProtocol {
     
     var update: ((EpisodeDataRendering) -> Void)?
+    
+    public var borderColor : UIColor {
+        return borderColors.randomElement() ?? .systemBlue
+    }
     
     private let episodeDataURL : URL?
     private var episode : RMEpisode? {
@@ -71,5 +77,12 @@ extension RMCharacterEpisodeCellViewModel : Hashable, Equatable {
         lhs.hashValue == rhs.hashValue
     }
     
+}
+
+extension RMCharacterEpisodeCellViewModel {
+    
+    private var borderColors : [UIColor] {
+        [.systemBlue, .systemMint, .systemPink, .systemGray, .systemTeal, .systemGreen, .systemRed, .systemIndigo, .systemOrange]
+    }
     
 }

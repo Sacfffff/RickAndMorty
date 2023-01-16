@@ -54,14 +54,14 @@ class RMCharacterEpisodeCollectionViewCell: UICollectionViewCell {
         }
         varViewModel.getEpisode()
         
+        contentView.layer.borderColor = viewModel.borderColor.cgColor
+        
     }
     
     private func setup() {
         
         contentView.backgroundColor = .tertiarySystemBackground
-        contentView.layer.cornerRadius = 8
-        contentView.layer.borderWidth = 2
-        contentView.layer.borderColor = UIColor.systemBlue.cgColor
+        setupLayer()
         contentView.clipsToBounds = true
         
         imageView.contentMode = .scaleAspectFill
@@ -81,6 +81,13 @@ class RMCharacterEpisodeCollectionViewCell: UICollectionViewCell {
         airDate.font = .systemFont(ofSize: 20, weight: .light)
         
         contentView.addSubviews(imageView, blurView, episode, name, airDate)
+    }
+    
+    private func setupLayer() {
+        
+        contentView.layer.cornerRadius = 8
+        contentView.layer.borderWidth = 2
+        
     }
     
     private func setupConstraints() {
