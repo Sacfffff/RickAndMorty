@@ -9,29 +9,65 @@ import UIKit
 
 protocol RMEpisodeViewViewModelProtocol {
     
+    var update : (() -> Void)? {get set}
+    func getEpisodeData() 
+    
 }
 
-class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
-
+final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
+    
+    var update: (() -> Void)?
+    
     private let endpointUrl : URL?
+    private var dataTuple: (RMEpisode, [RMCharacter])? {
+        didSet {
+            update?()
+        }
+    }
     
     init(url: URL?) {
         self.endpointUrl = url
         
-        getEpisodeData()
     }
     
-    private func getEpisodeData() {
+    /// Fetch backing episode model
+     func getEpisodeData() {
         guard let url = endpointUrl, let request = RMRequest(url: url) else { return }
         
-        RMService.shared.execute(request, expecting: RMEpisode.self) { result in
+        RMService.shared.execute(request, expecting: RMEpisode.self) { [weak self] result in
             switch result {
-            case .success(let success):
-                break
+            case .success(let episode):
+                self?.fetchRelatedCharacters(episode: episode)
             case .failure(let failure):
                 break
             }
         }
     }
     
+    private func fetchRelatedCharacters(episode: RMEpisode) {
+        let requests : [RMRequest] = episode.characters.compactMap{ URL(string: $0) }.compactMap{ RMRequest(url: $0) }
+        
+        let group = DispatchGroup()
+        
+        var characters : [RMCharacter] = []
+        
+        requests.forEach {
+            group.enter()
+            RMService.shared.execute($0, expecting: RMCharacter.self) { result in
+                defer {
+                    group.leave()
+                }
+                switch result {
+                case .success(let model):
+                    characters.append(model)
+                case .failure:
+                    break
+                }
+            }
+        }
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.dataTuple = (episode, characters)
+        }
+    }
 }

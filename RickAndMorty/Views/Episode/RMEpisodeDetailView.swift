@@ -9,10 +9,15 @@ import UIKit
 
 final class RMEpisodeDetailView: UIView {
 
+    private var viewModel : RMEpisodeViewViewModelProtocol?
+    
+    private let collectionView : UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
+    private let spinner : UIActivityIndicatorView = UIActivityIndicatorView(style: .medium)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setup()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -21,12 +26,37 @@ final class RMEpisodeDetailView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        setupConstraints()
     }
     
-    private func setup() {
+    func setup(with viewModel: RMEpisodeViewViewModelProtocol) {
+        
+        self.viewModel = viewModel
+       
+        
+    }
+    
+    private func configureUI() {
         
         self.translatesAutoresizingMaskIntoConstraints = false
         
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+    }
+    
+    private func setupConstraints() {
+        
+        NSLayoutConstraint.activate(
+            
+            [
+                
+                
+            ]
+        )
     }
 
 }

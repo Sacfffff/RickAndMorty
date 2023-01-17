@@ -86,7 +86,7 @@ extension RMCharacterDetailViewController : UICollectionViewDelegate {
         case .episodes:
             let episodeString = self.viewModel.episodes[indexPath.row]
             guard let episodeURL =  URL(string: episodeString) else { return }
-            navigationController?.pushViewController(RMEpisodeViewController(url: episodeURL), animated: true)
+            navigationController?.pushViewController(RMEpisodeDetailViewController(url: episodeURL), animated: true)
             
         }
     }

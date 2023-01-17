@@ -59,7 +59,7 @@ extension RMEpisodesViewController : RMEpisodeListViewDelegate {
     
     func rmEpisodeListViewListView(_ episodeListView: RMEpisodeListView, didSelectEpisode episode: RMEpisode) {
         
-        let detailVC = RMEpisodeViewController(url: URL(string: episode.url))
+        let detailVC = RMEpisodeDetailViewController(url: URL(string: episode.url))
         navigationController?.pushViewController(detailVC, animated: true)
         
     }

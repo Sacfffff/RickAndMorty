@@ -8,13 +8,13 @@
 import UIKit
 
 /// View Controller to show details about single episode
-final class RMEpisodeViewController: UIViewController {
+final class RMEpisodeDetailViewController: UIViewController {
     
     private var viewModel : RMEpisodeViewViewModelProtocol
     private var detailView : RMEpisodeDetailView = RMEpisodeDetailView()
 
     init(url: URL?){
-        
+       
         viewModel = RMEpisodeViewViewModel(url: url)
         super.init(nibName: nil, bundle: nil)
     }
@@ -31,7 +31,7 @@ final class RMEpisodeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setup()
     }
     
@@ -43,6 +43,15 @@ final class RMEpisodeViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareButtonDidTapped))
         
         view.addSubview(detailView)
+        
+        viewModel.update = { [weak self] in
+            if let self {
+                self.detailView.setup(with: self.viewModel)
+            }
+        }
+        
+        viewModel.getEpisodeData()
+        
     }
     
     @objc private func shareButtonDidTapped() {
