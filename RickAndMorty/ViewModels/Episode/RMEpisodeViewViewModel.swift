@@ -10,12 +10,15 @@ import UIKit
 protocol RMEpisodeViewViewModelProtocol {
     
     var update : (() -> Void)? {get set}
+    var sections : [SectionType] {get}
+    
     func getEpisodeData() 
     
 }
 
 final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
     
+    private(set) var sections : [SectionType] = []
     var update: (() -> Void)?
     
     private let endpointUrl : URL?
