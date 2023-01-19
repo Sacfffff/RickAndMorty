@@ -10,7 +10,7 @@ import UIKit
 protocol RMEpisodeViewViewModelProtocol {
     
     var update : (() -> Void)? {get set}
-    var sections : [SectionType] {get}
+    var cellViewModels : [RMEpisodeDetailView.SectionType] {get}
     
     func getEpisodeData() 
     
@@ -18,12 +18,13 @@ protocol RMEpisodeViewViewModelProtocol {
 
 final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
     
-    private(set) var sections : [SectionType] = []
+    private(set) var cellViewModels : [RMEpisodeDetailView.SectionType] = []
     var update: (() -> Void)?
     
     private let endpointUrl : URL?
-    private var dataTuple: (RMEpisode, [RMCharacter])? {
+    private var dataTuple: (episode: RMEpisode, characters: [RMCharacter])? {
         didSet {
+            createCellViewModels()
             update?()
         }
     }
@@ -45,6 +46,24 @@ final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
                 break
             }
         }
+    }
+    
+    private func createCellViewModels() {
+        
+        guard let episode = dataTuple?.episode, let characters = dataTuple?.characters else { return }
+        
+        cellViewModels =
+        [
+            .information(viewModels:
+                            [
+                                .init(title: "Episode name", value: episode.name),
+                                .init(title: "Air date", value: episode.airDate),
+                                .init(title: "Episode", value: episode.episode),
+                                .init(title: "Created", value: episode.created),
+                            ]
+                        ),
+            .characters(viewModels: characters.compactMap{ RMCharactersCollectionViewCellViewModel(characterName: $0.name, characterStatus: $0.status, characterImageURL: URL(string: $0.image))})
+        ]
     }
     
     private func fetchRelatedCharacters(episode: RMEpisode) {
@@ -70,7 +89,7 @@ final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
         }
         
         group.notify(queue: .main) { [weak self] in
-            self?.dataTuple = (episode, characters)
+            self?.dataTuple = (episode: episode, characters: characters)
         }
     }
 }

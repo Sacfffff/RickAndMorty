@@ -36,7 +36,7 @@ final class RMCharactersCollectionViewCell: UICollectionViewCell {
         status.text = nil
     }
     
-    func apply(viewModel: RMCharactersCollectionViewCellViewModel) {
+    func setup(viewModel: RMCharactersCollectionViewCellViewModel) {
         
         name.text = viewModel.characterName
         status.text = viewModel.characterStatusText

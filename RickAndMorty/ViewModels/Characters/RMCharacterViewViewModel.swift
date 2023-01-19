@@ -112,7 +112,7 @@ extension RMCharacterViewViewModel {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharactersCollectionViewCell.self)", for: indexPath) as? RMCharactersCollectionViewCell else { return .init() }
-        cell.apply(viewModel: cellViewModel[indexPath.row])
+        cell.setup(viewModel: cellViewModel[indexPath.row])
         return cell
     }
     
