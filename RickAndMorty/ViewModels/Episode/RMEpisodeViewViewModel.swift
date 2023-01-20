@@ -12,7 +12,8 @@ protocol RMEpisodeViewViewModelProtocol {
     var update : (() -> Void)? {get set}
     var cellViewModels : [RMEpisodeDetailView.SectionType] {get}
     
-    func getEpisodeData() 
+    func getEpisodeData()
+    func character(at index: Int) -> RMCharacter?
     
 }
 
@@ -34,6 +35,14 @@ final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
         
     }
     
+    func character(at index: Int) -> RMCharacter?  {
+        
+        guard let dataTuple = dataTuple else { return nil }
+        
+        return dataTuple.characters[index]
+        
+    }
+    
     /// Fetch backing episode model
      func getEpisodeData() {
         guard let url = endpointUrl, let request = RMRequest(url: url) else { return }
@@ -52,6 +61,12 @@ final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
         
         guard let episode = dataTuple?.episode, let characters = dataTuple?.characters else { return }
         
+        var createdString : String = episode.created
+        
+        if let createdDate = RMDateFormatter.shared.dateFormatter.date(from: episode.created) {
+            createdString = RMDateFormatter.shared.shortDateFormatter.string(from: createdDate)
+        }
+       
         cellViewModels =
         [
             .information(viewModels:
@@ -59,7 +74,7 @@ final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
                                 .init(title: "Episode name", value: episode.name),
                                 .init(title: "Air date", value: episode.airDate),
                                 .init(title: "Episode", value: episode.episode),
-                                .init(title: "Created", value: episode.created),
+                                .init(title: "Created", value: createdString),
                             ]
                         ),
             .characters(viewModels: characters.compactMap{ RMCharactersCollectionViewCellViewModel(characterName: $0.name, characterStatus: $0.status, characterImageURL: URL(string: $0.image))})

@@ -19,7 +19,7 @@ class RMCharacterEpisodeCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setup()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -43,7 +43,7 @@ class RMCharacterEpisodeCollectionViewCell: UICollectionViewCell {
         airDate.text = nil
     }
     
-    func configure(with viewModel: RMCharacterEpisodeCellViewModelProtocol) {
+    func setup(with viewModel: RMCharacterEpisodeCellViewModelProtocol) {
         
         var varViewModel = viewModel
         
@@ -58,7 +58,7 @@ class RMCharacterEpisodeCollectionViewCell: UICollectionViewCell {
         
     }
     
-    private func setup() {
+    private func configureUI() {
         
         contentView.backgroundColor = .tertiarySystemBackground
         setupLayer()

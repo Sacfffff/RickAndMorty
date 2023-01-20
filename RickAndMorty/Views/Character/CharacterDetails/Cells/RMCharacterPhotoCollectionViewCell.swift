@@ -14,7 +14,7 @@ class RMCharacterPhotoCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setup()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -33,7 +33,7 @@ class RMCharacterPhotoCollectionViewCell: UICollectionViewCell {
         imageView.image = nil
     }
     
-    private func setup() {
+    private func configureUI() {
         
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -42,7 +42,7 @@ class RMCharacterPhotoCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(imageView)
     }
     
-    func configure(with viewModel: RMCharacterPhotoCellViewModelProtocol) {
+    func setup(with viewModel: RMCharacterPhotoCellViewModelProtocol) {
         
         viewModel.getImage { [weak self] result in
             switch result {

@@ -42,6 +42,7 @@ final class RMEpisodeDetailViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareButtonDidTapped))
         
+        detailView.delegate = self
         view.addSubview(detailView)
         
         viewModel.update = { [weak self] in
@@ -49,7 +50,6 @@ final class RMEpisodeDetailViewController: UIViewController {
                 self.detailView.setup(with: self.viewModel)
             }
         }
-        
         viewModel.getEpisodeData()
         
     }
@@ -72,4 +72,17 @@ final class RMEpisodeDetailViewController: UIViewController {
             ])
     }
 
+}
+
+extension RMEpisodeDetailViewController : RMEpisodeDetailViewDelegate {
+    
+    func rmEpisodeDetailView(_ detailView: RMEpisodeDetailView, didSelect character: RMCharacter) {
+        
+        let characterVC = RMCharacterDetailViewController(viewModel: RMCharacterDetailViewModel(character: character))
+        
+        navigationController?.pushViewController(characterVC, animated: true)
+        
+    }
+    
+    
 }

@@ -20,7 +20,7 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setup()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -46,7 +46,7 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
         icon.tintColor = nil
     }
     
-    private func setup() {
+    private func configureUI() {
         
         contentView.backgroundColor = .tertiarySystemBackground
         contentView.layer.cornerRadius = 8
@@ -77,7 +77,7 @@ class RMCharacterInfoCollectionViewCell: UICollectionViewCell {
 
     }
     
-    func configure(with viewModel: RMCharacterInfoCellViewModelProtocol) {
+    func setup(with viewModel: RMCharacterInfoCellViewModelProtocol) {
         title.text = viewModel.title
         value.text = viewModel.displayValue
         icon.image = viewModel.iconImage

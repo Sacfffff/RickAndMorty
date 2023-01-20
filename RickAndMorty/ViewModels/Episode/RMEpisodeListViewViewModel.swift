@@ -113,7 +113,7 @@ extension RMEpisodeListViewViewModel {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharacterEpisodeCollectionViewCell.self)", for: indexPath) as? RMCharacterEpisodeCollectionViewCell else { return .init() }
-        cell.configure(with: cellViewModel[indexPath.row])
+        cell.setup(with: cellViewModel[indexPath.row])
         return cell
     }
     

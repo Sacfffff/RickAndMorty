@@ -17,21 +17,6 @@ protocol RMCharacterInfoCellViewModelProtocol {
 
 final class RMCharacterInfoCellViewModel : RMCharacterInfoCellViewModelProtocol {
     
-    private static let dateFormatter : DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSSSZ"
-        formatter.timeZone = .current
-        return formatter
-    }()
-    
-    private static let shortDateFormatter : DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeZone = .current
-        formatter.timeStyle = .short
-        formatter.dateStyle = .medium
-        return formatter
-    }()
-    
     var iconImage: UIImage? {
         type.iconImage
     }
@@ -50,8 +35,8 @@ final class RMCharacterInfoCellViewModel : RMCharacterInfoCellViewModelProtocol 
         
         if value.isEmpty {displayValue = "None"}
         
-        if type == .created, let date = Self.dateFormatter.date(from: value) {
-            displayValue = Self.shortDateFormatter.string(from: date)
+        if type == .created, let date = RMDateFormatter.shared.dateFormatter.date(from: value) {
+            displayValue = RMDateFormatter.shared.shortDateFormatter.string(from: date)
         }
        
         return displayValue

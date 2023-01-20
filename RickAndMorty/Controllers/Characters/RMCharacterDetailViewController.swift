@@ -122,15 +122,15 @@ extension RMCharacterDetailViewController : UICollectionViewDataSource {
            
         case .photo(let photoModel):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharacterPhotoCollectionViewCell.self)", for: indexPath) as? RMCharacterPhotoCollectionViewCell else { return .init() }
-            cell.configure(with: photoModel)
+            cell.setup(with: photoModel)
             return cell
         case .information(let infoModel):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharacterInfoCollectionViewCell.self)", for: indexPath) as? RMCharacterInfoCollectionViewCell else { return .init() }
-            cell.configure(with: infoModel[indexPath.row])
+            cell.setup(with: infoModel[indexPath.row])
             return cell
         case .episodes(let episodesModel):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(RMCharacterEpisodeCollectionViewCell.self)", for: indexPath) as? RMCharacterEpisodeCollectionViewCell else { return .init() }
-            cell.configure(with: episodesModel[indexPath.row])
+            cell.setup(with: episodesModel[indexPath.row])
             return cell
         }
             
