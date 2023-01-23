@@ -28,19 +28,26 @@ struct RMSettingsView: View {
                         .padding(8)
                         .background(Color(viewModel.iconContainerColor))
                         .cornerRadius(6)
-                        
+                    
                 }
-                
+                   
                 Text(viewModel.title)
                     .padding(.leading, 10)
-            
-            }.padding(.bottom, 3)
+                Spacer()
+                
+                
+            }.onTapGesture {
+                viewModel.onTapHandler(viewModel.type)
+            }
+            .padding(.bottom, 3)
         }
     }
 }
 
 struct RMSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        RMSettingsView(model: RMSettingsViewModel(cellViewModels: RMSettingsOption.allCases.compactMap{ RMSettingsCellViewModel(type: $0) }))
+        RMSettingsView(model: RMSettingsViewModel(cellViewModels: RMSettingsOption.allCases.compactMap{ RMSettingsCellViewModel(type: $0) { option in
+            
+        } }))
     }
 }
