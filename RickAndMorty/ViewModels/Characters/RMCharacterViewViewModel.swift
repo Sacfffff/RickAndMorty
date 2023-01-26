@@ -47,7 +47,7 @@ final class RMCharacterViewViewModel : NSObject, RMCharacterViewViewModelProtoco
     
     /// Fetch initial set of characters(20)
     func getAllCharacters() {
-        RMService.shared.execute(RMService.listOfCharactersRequest, expecting: RMGetAllCharactersResponce.self) { [weak self] result in
+        RMService.shared.execute(.listOfCharactersRequest, expecting: RMGetAllCharactersResponce.self) { [weak self] result in
             
             switch result {
             case .failure(let error):

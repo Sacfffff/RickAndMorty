@@ -120,3 +120,11 @@ final class RMRequest {
     }
     
 }
+
+extension RMRequest {
+    
+    public static let listOfCharactersRequest : RMRequest = RMRequest(endpoint: .character)
+    public static let listOfEpisidesRequest : RMRequest = RMRequest(endpoint: .episode)
+    public static let listOfLocationsRequest : RMRequest = RMRequest(endpoint: .location)
+    
+}

@@ -48,7 +48,7 @@ final class RMEpisodeListViewViewModel : NSObject, RMEpisodeListViewViewModelPro
     
     /// Fetch initial set of episodes(20)
     func getAllEpisodes() {
-        RMService.shared.execute(RMService.listOfEpisidesRequest, expecting: RMGetAllEpisodesResponce.self) { [weak self] result in
+        RMService.shared.execute(.listOfEpisidesRequest, expecting: RMGetAllEpisodesResponce.self) { [weak self] result in
             
             switch result {
             case .failure(let error):
