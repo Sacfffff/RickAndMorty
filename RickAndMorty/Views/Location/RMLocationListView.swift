@@ -58,9 +58,11 @@ final class RMLocationListView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(RMLocationTableViewCell.self, forCellReuseIdentifier: "\(RMLocationTableViewCell.self)")
         tableView.alpha = 0
         tableView.isHidden = true
+        tableView.delegate = self
+        tableView.dataSource = self
         
         spinner.hidesWhenStopped = true
         spinner.translatesAutoresizingMaskIntoConstraints = false
@@ -87,4 +89,36 @@ final class RMLocationListView: UIView {
     }
 
   
+}
+
+//MARK: - UITableViewDelegate
+
+extension RMLocationListView : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+}
+
+//MARK: - UITableViewDataSource
+
+extension RMLocationListView : UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel?.cellViewModels.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cellViewModel = viewModel?.cellViewModels[indexPath.row] else { fatalError() }
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(RMLocationTableViewCell.self)", for: indexPath) as? RMLocationTableViewCell else { fatalError() }
+        
+        cell.textLabel?.text = cellViewModel.name
+        return cell
+
+    }
+    
+    
 }

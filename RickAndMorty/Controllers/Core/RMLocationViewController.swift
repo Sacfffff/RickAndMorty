@@ -35,6 +35,13 @@ final class RMLocationViewController: UIViewController {
         
         view.addSubview(locationListView)
         
+        viewModel.update = { [weak self] in
+            if let self {
+                self.locationListView.update(with: self.viewModel)
+            }
+        }
+        viewModel.getLocations()
+        
     }
     
     @objc private func searchButtonDidTap() {
