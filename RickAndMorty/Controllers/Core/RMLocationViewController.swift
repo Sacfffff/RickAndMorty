@@ -16,6 +16,7 @@ final class RMLocationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .systemBackground
         title = "Locations"
         
@@ -33,14 +34,11 @@ final class RMLocationViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonDidTap))
         
-        view.addSubview(locationListView)
-        
-        viewModel.update = { [weak self] in
-            if let self {
-                self.locationListView.update(with: self.viewModel)
-            }
-        }
+        viewModel.delegate = self
         viewModel.getLocations()
+        
+        locationListView.delegate = self
+        view.addSubview(locationListView)
         
     }
     
@@ -61,4 +59,29 @@ final class RMLocationViewController: UIViewController {
             ])
     }
 
+}
+
+extension RMLocationViewController : RMLocationListViewDelegate {
+    
+    func rmLocationListView(_ locationView: RMLocationListView, didSelect location: RMLocation) {
+        
+        let vc = RMLocationDetailViewController(location: location)
+        
+        navigationController?.pushViewController(vc, animated: true)
+        
+        
+    }
+    
+
+}
+
+extension RMLocationViewController : RMLocationListViewViewModelDelegate {
+    
+    func rmDidGetLocations() {
+        locationListView.update(with: self.viewModel)
+    }
+    
+    
+    
+    
 }

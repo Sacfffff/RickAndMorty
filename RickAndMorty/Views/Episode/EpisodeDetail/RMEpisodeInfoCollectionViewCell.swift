@@ -82,9 +82,7 @@ final class RMEpisodeInfoCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate(
             
             [
-                
-                
-                
+
                 //title
                 title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
                 title.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10),

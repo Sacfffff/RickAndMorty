@@ -7,9 +7,17 @@
 
 import UIKit
 
+protocol RMLocationListViewDelegate : AnyObject {
+    
+    func rmLocationListView(_ locationView: RMLocationListView, didSelect location: RMLocation)
+    
+}
+
 final class RMLocationListView: UIView {
     
-    private let tableView : UITableView = UITableView()
+    weak var delegate : RMLocationListViewDelegate?
+    
+    private let tableView : UITableView = UITableView(frame: .zero, style: .grouped)
     private let spinner : UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     
     private var viewModel : RMLocationListViewViewModelProtocol?  {
@@ -20,8 +28,8 @@ final class RMLocationListView: UIView {
             tableView.isHidden = false
             tableView.reloadData()
             
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.tableView.alpha = 1
+            UIView.animate(withDuration: 0.3) { 
+                self.tableView.alpha = 1
             }
             
         }
@@ -62,12 +70,13 @@ final class RMLocationListView: UIView {
         tableView.alpha = 0
         tableView.isHidden = true
         tableView.delegate = self
+        tableView.rowHeight = 100
         tableView.dataSource = self
         
         spinner.hidesWhenStopped = true
         spinner.translatesAutoresizingMaskIntoConstraints = false
         
-        addSubviews(spinner, tableView)
+        addSubviews(tableView, spinner)
     }
     
     private func setupConstraints() {
@@ -97,6 +106,9 @@ extension RMLocationListView : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        guard let location = viewModel?.location(at: indexPath.row) else { fatalError() }
+        
+        delegate?.rmLocationListView(self, didSelect: location)
     }
     
 }
@@ -115,7 +127,7 @@ extension RMLocationListView : UITableViewDataSource {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(RMLocationTableViewCell.self)", for: indexPath) as? RMLocationTableViewCell else { fatalError() }
         
-        cell.textLabel?.text = cellViewModel.name
+        cell.update(with: cellViewModel)
         return cell
 
     }

@@ -9,16 +9,22 @@ import Foundation
 
 protocol RMLocationListViewViewModelProtocol {
     
-    var update : (() -> Void)?{get set}
+    var delegate : RMLocationListViewViewModelDelegate? {get set}
     var cellViewModels : [RMLocationTableViewCellViewModel]{get}
-    
+      
     func getLocations()
+    func location(at index: Int) -> RMLocation?
     
+}
+
+protocol RMLocationListViewViewModelDelegate : AnyObject {
+    
+    func rmDidGetLocations()
 }
 
 final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
     
-    var update: (() -> Void)?
+    weak var delegate : RMLocationListViewViewModelDelegate?
     
     var cellViewModels : [RMLocationTableViewCellViewModel] = []
     
@@ -48,6 +54,14 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
         
     }
     
+    func location(at index: Int) -> RMLocation? {
+        
+        guard !(index >= locations.count) else { return nil}
+        
+        return self.locations[index]
+        
+    }
+    
     func getLocations() {
         
         RMService.shared.execute(.listOfLocationsRequest, expecting: RMGetAllLocationsResponce.self) { [weak self] result in
@@ -58,7 +72,7 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
                 self?.locations = model.results
                
                 DispatchQueue.main.async {
-                    self?.update?()
+                    self?.delegate?.rmDidGetLocations()
                 }
                 
             case .failure(let failure):

@@ -14,7 +14,7 @@ final class RMLocationTableViewCellViewModel {
     }
     
     var type : String {
-        location.type
+        "Type \(location.type)"
     }
     
     var dimension : String {
