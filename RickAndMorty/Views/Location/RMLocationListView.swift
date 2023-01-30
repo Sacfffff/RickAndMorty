@@ -66,8 +66,8 @@ final class RMLocationListView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(RMLocationTableViewCell.self, forCellReuseIdentifier: "\(RMLocationTableViewCell.self)")
         tableView.alpha = 0
+        tableView.register(RMLocationTableViewCell.self, forCellReuseIdentifier: "\(RMLocationTableViewCell.self)")
         tableView.isHidden = true
         tableView.delegate = self
         tableView.rowHeight = 100
@@ -128,6 +128,8 @@ extension RMLocationListView : UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(RMLocationTableViewCell.self)", for: indexPath) as? RMLocationTableViewCell else { fatalError() }
         
         cell.update(with: cellViewModel)
+        
+        
         return cell
 
     }

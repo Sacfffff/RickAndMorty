@@ -43,7 +43,8 @@ final class RMLocationViewController: UIViewController {
     }
     
     @objc private func searchButtonDidTap() {
-        
+        let vc = RMSearchViewController(config: .init(type: .location))
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func setupConstraints() {
@@ -80,8 +81,6 @@ extension RMLocationViewController : RMLocationListViewViewModelDelegate {
     func rmDidGetLocations() {
         locationListView.update(with: self.viewModel)
     }
-    
-    
-    
+
     
 }

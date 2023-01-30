@@ -31,7 +31,7 @@ class RMSearchViewController: UIViewController {
     
     private func setup() {
         
-        title = "Search"
+        title = config.type.rawValue
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemBackground
         
@@ -41,12 +41,16 @@ class RMSearchViewController: UIViewController {
 
 extension RMSearchViewController {
     
+    /// Configuration for search session
     struct Config {
         
-        enum ConfigType {
-            case episode
-            case characters
-            case location
+        enum ConfigType : String {
+            case episode = "Search Episodes"
+            case characters = "Search Character"
+            case location = "Search Location"
+            
+            
+            
         }
         
         let type : ConfigType

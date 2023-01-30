@@ -36,7 +36,8 @@ final class RMEpisodesViewController: UIViewController {
     }
     
     @objc private func searchButtonDidTap() {
-        
+        let vc = RMSearchViewController(config: .init(type: .episode))
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func setupConstraints() {
