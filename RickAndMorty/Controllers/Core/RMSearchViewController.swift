@@ -11,11 +11,14 @@ import UIKit
 /// Configure controller to search
 class RMSearchViewController: UIViewController {
     
-    private var config : Config
+    private let viewModel : RMSearchViewViewModel
+    
+    private let searchView : RMSearchView
     
     init(config: Config) {
         
-        self.config = config
+        self.viewModel = RMSearchViewViewModel(config: config)
+        self.searchView = RMSearchView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -29,11 +32,46 @@ class RMSearchViewController: UIViewController {
         setup()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        setupConstraints()
+        
+    }
+    
     private func setup() {
         
-        title = config.type.rawValue
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Search", style: .done, target: self, action: #selector(searchButtonDidTap))
+        
+        title = viewModel.config.type.rawValue
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemBackground
+        
+        view.addSubview(searchView)
+        
+    }
+    
+    @objc private func searchButtonDidTap() {
+        
+       // viewModel.executeSearch()
+        
+        
+    }
+    
+    private func setupConstraints() {
+        
+        NSLayoutConstraint.activate(
+            [
+                
+                //searchView
+                searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                searchView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                searchView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+                searchView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+                
+               
+                
+            ])
         
     }
     
