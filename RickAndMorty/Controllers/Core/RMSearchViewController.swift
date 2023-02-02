@@ -32,6 +32,13 @@ class RMSearchViewController: UIViewController {
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        searchView.presentKeyboard()
+        
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -47,6 +54,9 @@ class RMSearchViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemBackground
         
+        searchView.selectedOption = { [weak self] option in
+            print(option.rawValue)
+        }
         view.addSubview(searchView)
         
     }
