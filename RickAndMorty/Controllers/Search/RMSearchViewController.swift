@@ -55,7 +55,12 @@ class RMSearchViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         searchView.selectedOption = { [weak self] option in
-            print(option.rawValue)
+            let vc = RMSearchOptionPickerViewController(option: option) { option in
+                print(option)
+            }
+            vc.sheetPresentationController?.prefersGrabberVisible = true
+            vc.sheetPresentationController?.detents = [.medium()]
+            self?.present(vc, animated: true)
         }
         view.addSubview(searchView)
         

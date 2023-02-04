@@ -82,6 +82,25 @@ extension RMSearchInputViewViewModel {
         case gender = "Gender"
         case locationType = "Location Type"
         
+        var choices : [String] {
+            
+            let choices : [String]
+            
+            switch self {
+                
+            case .status:
+                choices = ["alive", "dead", "unknown"]
+            case .gender:
+                choices = ["male", "female", "genderless", "uknown"]
+            case .locationType:
+                choices = ["planet", "cluster", "microverse"]
+            }
+            
+            
+            return choices
+            
+        }
+        
     }
     
 }
