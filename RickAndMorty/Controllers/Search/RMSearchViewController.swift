@@ -55,8 +55,10 @@ class RMSearchViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         searchView.selectedOption = { [weak self] option in
-            let vc = RMSearchOptionPickerViewController(option: option) { option in
-                print(option)
+            let vc = RMSearchOptionPickerViewController(option: option) { [weak self] selection in
+                DispatchQueue.main.async {
+                    self?.viewModel.set(value: selection, for: option)
+                }
             }
             vc.sheetPresentationController?.prefersGrabberVisible = true
             vc.sheetPresentationController?.detents = [.medium()]
@@ -68,7 +70,7 @@ class RMSearchViewController: UIViewController {
     
     @objc private func searchButtonDidTap() {
         
-       // viewModel.executeSearch()
+        viewModel.executeSearch()
         
         
     }

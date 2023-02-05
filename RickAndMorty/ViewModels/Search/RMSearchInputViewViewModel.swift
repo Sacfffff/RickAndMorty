@@ -11,8 +11,6 @@ final class RMSearchInputViewViewModel {
     
     private let type : RMSearchViewController.Config.ConfigType
     
-    
-    
     init(type: RMSearchViewController.Config.ConfigType) {
         self.type = type
         

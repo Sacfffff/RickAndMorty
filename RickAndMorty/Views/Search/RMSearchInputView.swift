@@ -59,8 +59,16 @@ final class RMSearchInputView: UIView {
     }
     
     
-    func createOptionsSelectionViews(options: [RMSearchInputViewViewModel.DynamicOptions]) {
+    func update(with option: RMSearchInputViewViewModel.DynamicOptions, value: String) {
         
+        guard let options = viewModel?.options, let index = options.firstIndex(of: option), let button = stackView.arrangedSubviews[index] as? UIButton else { return }
+        
+        button.setAttributedTitle(NSAttributedString(string: value.prefix(1).capitalized + value.dropFirst(), attributes: [.font: UIFont.systemFont(ofSize: 18, weight: .medium), .foregroundColor : UIColor.link]), for: .normal)
+        
+    }
+    
+    
+    func createOptionsSelectionViews(options: [RMSearchInputViewViewModel.DynamicOptions]) {
     
         options.enumerated().forEach{
             let button = UIButton()

@@ -48,6 +48,10 @@ final class RMSearchView: UIView {
         resultInputView.delegate = self
         resultInputView.update(with: .init(type: viewModel.config.type))
         
+        viewModel.registerOptionChange { [weak self] option, value in
+            self?.resultInputView.update(with: option, value: value)
+        }
+        
         self.addSubviews(noResultView, resultInputView)
     }
     
