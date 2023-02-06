@@ -17,6 +17,8 @@ final class RMSearchInputView: UIView {
     
     weak var delegate : RMSearchInputViewDelegate?
     
+    var didBeginSearch : (() -> Void)?
+    
     private var viewModel : RMSearchInputViewViewModel? {
         
         didSet {
@@ -96,6 +98,7 @@ final class RMSearchInputView: UIView {
         
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Search"
+        searchBar.delegate = self
         addSubview(searchBar)
         
        
@@ -134,6 +137,18 @@ final class RMSearchInputView: UIView {
                 stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
                 
             ])
+        
+    }
+    
+}
+
+//MARK: - extension UISearchBarDelegate
+
+extension RMSearchInputView : UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        didBeginSearch?()
         
     }
     

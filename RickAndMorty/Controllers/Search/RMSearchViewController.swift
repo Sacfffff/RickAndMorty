@@ -48,8 +48,6 @@ class RMSearchViewController: UIViewController {
     
     private func setup() {
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Search", style: .done, target: self, action: #selector(searchButtonDidTap))
-        
         title = viewModel.config.type.rawValue
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemBackground
@@ -64,16 +62,13 @@ class RMSearchViewController: UIViewController {
             vc.sheetPresentationController?.detents = [.medium()]
             self?.present(vc, animated: true)
         }
+        searchView.didBeginSearch = { [weak self] in
+            self?.viewModel.executeSearch()
+        }
         view.addSubview(searchView)
         
     }
     
-    @objc private func searchButtonDidTap() {
-        
-        viewModel.executeSearch()
-        
-        
-    }
     
     private func setupConstraints() {
         
@@ -104,7 +99,23 @@ extension RMSearchViewController {
             case characters = "Search Character"
             case location = "Search Location"
             
-            
+            var endPoint : RMEndpoint {
+                
+                let endPont : RMEndpoint
+                
+                switch self {
+                    
+                case .episode:
+                    endPont = .episode
+                case .characters:
+                    endPont = .character
+                case .location:
+                    endPont = .location
+                }
+                
+                return endPont
+                
+            }
             
         }
         

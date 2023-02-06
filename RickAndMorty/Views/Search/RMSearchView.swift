@@ -10,6 +10,7 @@ import UIKit
 final class RMSearchView: UIView {
 
     var selectedOption : ((RMSearchInputViewViewModel.DynamicOptions) -> Void)?
+    var didBeginSearch : (() -> Void)?
     
     private let viewModel : RMSearchViewViewModel
     
@@ -51,7 +52,9 @@ final class RMSearchView: UIView {
         viewModel.registerOptionChange { [weak self] option, value in
             self?.resultInputView.update(with: option, value: value)
         }
-        
+        resultInputView.didBeginSearch = { [weak self] in
+            self?.didBeginSearch?()
+        }
         self.addSubviews(noResultView, resultInputView)
     }
     

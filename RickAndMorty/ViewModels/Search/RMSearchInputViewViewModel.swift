@@ -80,6 +80,23 @@ extension RMSearchInputViewViewModel {
         case gender = "Gender"
         case locationType = "Location Type"
         
+        var queryArgument : String {
+            
+            let queryArgument : String
+            
+            switch self {
+                
+            case .status:
+                queryArgument = "status"
+            case .gender:
+                queryArgument = "gender"
+            case .locationType:
+                queryArgument = "type"
+            }
+            
+            return queryArgument
+        }
+        
         var choices : [String] {
             
             let choices : [String]
