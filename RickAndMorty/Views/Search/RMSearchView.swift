@@ -10,7 +10,6 @@ import UIKit
 final class RMSearchView: UIView {
 
     var selectedOption : ((RMSearchInputViewViewModel.DynamicOptions) -> Void)?
-    var didBeginSearch : (() -> Void)?
     
     private let viewModel : RMSearchViewViewModel
     
@@ -51,9 +50,6 @@ final class RMSearchView: UIView {
         
         viewModel.registerOptionChange { [weak self] option, value in
             self?.resultInputView.update(with: option, value: value)
-        }
-        resultInputView.didBeginSearch = { [weak self] in
-            self?.didBeginSearch?()
         }
         self.addSubviews(noResultView, resultInputView)
     }
@@ -109,6 +105,20 @@ extension RMSearchView : UICollectionViewDataSource {
 //MARK: - RMSearchInputViewDelegate
 
 extension RMSearchView : RMSearchInputViewDelegate {
+    
+    func rmSearchInputViewDidTappedSearchKeybordButton(_ inputView: RMSearchInputView) {
+        
+        self.viewModel.executeSearch()
+        
+    }
+    
+    
+    func rmSearchInputView(_ inputView: RMSearchInputView, didChangeSearchText text: String) {
+        
+        self.viewModel.set(query: text)
+        
+    }
+    
     
     
     func rmSearchInputView(_ inputView: RMSearchInputView, didSelect option: RMSearchInputViewViewModel.DynamicOptions) {

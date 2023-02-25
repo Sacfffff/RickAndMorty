@@ -62,9 +62,6 @@ class RMSearchViewController: UIViewController {
             vc.sheetPresentationController?.detents = [.medium()]
             self?.present(vc, animated: true)
         }
-        searchView.didBeginSearch = { [weak self] in
-            self?.viewModel.executeSearch()
-        }
         view.addSubview(searchView)
         
     }

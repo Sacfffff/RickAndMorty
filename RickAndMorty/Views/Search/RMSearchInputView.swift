@@ -10,14 +10,15 @@ import UIKit
 protocol RMSearchInputViewDelegate : AnyObject {
     
     func rmSearchInputView(_ inputView: RMSearchInputView, didSelect option: RMSearchInputViewViewModel.DynamicOptions)
+    func rmSearchInputView(_ inputView: RMSearchInputView, didChangeSearchText text: String)
+    func rmSearchInputViewDidTappedSearchKeybordButton(_ inputView: RMSearchInputView)
     
 }
 
+/// View for top part of search screen with search bar
 final class RMSearchInputView: UIView {
     
     weak var delegate : RMSearchInputViewDelegate?
-    
-    var didBeginSearch : (() -> Void)?
     
     private var viewModel : RMSearchInputViewViewModel? {
         
@@ -147,8 +148,16 @@ final class RMSearchInputView: UIView {
 extension RMSearchInputView : UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
         searchBar.resignFirstResponder()
-        didBeginSearch?()
+        delegate?.rmSearchInputViewDidTappedSearchKeybordButton(self)
+        
+    }
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        delegate?.rmSearchInputView(self, didChangeSearchText: searchText)
         
     }
     
