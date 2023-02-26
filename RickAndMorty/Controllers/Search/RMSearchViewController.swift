@@ -92,6 +92,7 @@ extension RMSearchViewController {
     struct Config {
         
         enum ConfigType : String {
+            
             case episode = "Search Episodes"
             case characters = "Search Character"
             case location = "Search Location"
@@ -111,6 +112,24 @@ extension RMSearchViewController {
                 }
                 
                 return endPont
+                
+            }
+            
+            var searchResultType : any RMGetAllResponceType.Type {
+                
+                let type : any RMGetAllResponceType.Type
+                
+                switch self {
+                    
+                case .episode:
+                    type = RMGetAllEpisodesResponce.self
+                case .characters:
+                    type = RMGetAllCharactersResponce.self
+                case .location:
+                    type = RMGetAllLocationsResponce.self
+                }
+                
+                return type
                 
             }
             

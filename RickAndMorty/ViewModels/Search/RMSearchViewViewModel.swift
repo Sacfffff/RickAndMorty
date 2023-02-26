@@ -14,7 +14,7 @@ final class RMSearchViewViewModel {
     private var optionMap: [RMSearchInputViewViewModel.DynamicOptions: String] = [:]
     private var optionMapUpdateBlock : ((RMSearchInputViewViewModel.DynamicOptions, String)->Void)?
     
-    private var searchResultHandler : (() -> Void)?
+    private var searchResultHandler : ((RMSearchResultType) -> Void)?
     
     private var searchText : String = ""
     
@@ -45,7 +45,7 @@ final class RMSearchViewViewModel {
     }
     
     
-    func registerSearchResultHandler(_ block: @escaping () -> Void) {
+    func registerSearchResultHandler(_ block: @escaping (RMSearchResultType) -> Void) {
         self.searchResultHandler = block
     }
     
@@ -59,10 +59,20 @@ final class RMSearchViewViewModel {
         
         let request = RMRequest(endpoint: config.type.endPoint, queryParameters: queryParams)
         
-        RMService.shared.execute(request, expecting: RMGetAllCharactersResponce.self) { result in
+        makeSearchAPICall(config.type.searchResultType, request: request)
+
+    }
+    
+    private func makeSearchAPICall<T : RMGetAllResponceType>(_ type: T.Type, request: RMRequest) {
+        
+        RMService.shared.execute(request, expecting: type) { [weak self] result in
             switch result {
             case .success(let model):
-                print(model.info.count)
+                if let vm = RMSearchResultFactory(model: model).getViewModel() {
+                    self?.searchResultHandler?(vm)
+                } else {
+                    //no result
+                }
             case .failure(let error):
                 break
             }

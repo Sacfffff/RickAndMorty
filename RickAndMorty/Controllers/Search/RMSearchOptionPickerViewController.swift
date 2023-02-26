@@ -100,7 +100,7 @@ extension RMSearchOptionPickerViewController : UITableViewDataSource {
         let choice = option.choices[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var configuration = cell.defaultContentConfiguration()
-        configuration.text = choice.prefix(1).capitalized + choice.dropFirst()
+        configuration.text = choice.capitalized
         cell.contentConfiguration = configuration
         return cell
     }

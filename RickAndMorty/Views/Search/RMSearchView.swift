@@ -51,6 +51,10 @@ final class RMSearchView: UIView {
         viewModel.registerOptionChange { [weak self] option, value in
             self?.resultInputView.update(with: option, value: value)
         }
+        viewModel.registerSearchResultHandler { [weak self] results in
+            print(results)
+        }
+        
         self.addSubviews(noResultView, resultInputView)
     }
     

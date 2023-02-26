@@ -7,7 +7,17 @@
 
 import Foundation
 
-struct RMGetAllCharactersResponce : Codable {
+protocol RMGetAllResponceType : Codable {
+    
+    associatedtype ResponceInfoType
+    associatedtype ResultType
+    
+    var info : ResponceInfoType { get }
+    var results : [ResultType] { get }
+    
+}
+
+struct RMGetAllCharactersResponce : RMGetAllResponceType {
    
     let info : RMGetAllCharactersResponceInfo
     let results : [RMCharacter]

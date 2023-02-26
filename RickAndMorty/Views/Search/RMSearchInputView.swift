@@ -66,7 +66,7 @@ final class RMSearchInputView: UIView {
         
         guard let options = viewModel?.options, let index = options.firstIndex(of: option), let button = stackView.arrangedSubviews[index] as? UIButton else { return }
         
-        button.setAttributedTitle(NSAttributedString(string: value.prefix(1).capitalized + value.dropFirst(), attributes: [.font: UIFont.systemFont(ofSize: 18, weight: .medium), .foregroundColor : UIColor.link]), for: .normal)
+        button.setAttributedTitle(NSAttributedString(string: value.capitalized, attributes: [.font: UIFont.systemFont(ofSize: 18, weight: .medium), .foregroundColor : UIColor.link]), for: .normal)
         
     }
     
