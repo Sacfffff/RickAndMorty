@@ -15,6 +15,7 @@ final class RMSearchView: UIView {
     
     private let noResultView = RMNoSearchResultView()
     private let resultInputView = RMSearchInputView()
+    private let resultsView = RMSearchResultsView()
     
     
     init(viewModel: RMSearchViewViewModel) {
@@ -48,15 +49,32 @@ final class RMSearchView: UIView {
         resultInputView.delegate = self
         resultInputView.update(with: .init(type: viewModel.config.type))
         
+        self.setupHandlers()
+        
+        self.addSubviews(resultsView, noResultView, resultInputView)
+    }
+    
+    
+    private func setupHandlers() {
+        
         viewModel.registerOptionChange { [weak self] option, value in
             self?.resultInputView.update(with: option, value: value)
         }
         viewModel.registerSearchResultHandler { [weak self] results in
-            print(results)
+            DispatchQueue.main.async {
+                self?.resultsView.update(with: results)
+                self?.noResultView.isHidden = true
+                self?.resultsView.isHidden = false
+            }
         }
-        
-        self.addSubviews(noResultView, resultInputView)
+        viewModel.registerNoSearchResultHandler { [weak self] in
+            DispatchQueue.main.async {
+                self?.noResultView.isHidden = false
+                self?.resultsView.isHidden = true
+            }
+        }
     }
+    
     
     private func setupConstraints() {
         
@@ -74,6 +92,12 @@ final class RMSearchView: UIView {
                 resultInputView.leftAnchor.constraint(equalTo: leftAnchor),
                 resultInputView.rightAnchor.constraint(equalTo: rightAnchor),
                 resultInputView.heightAnchor.constraint(equalToConstant: viewModel.config.type == .episode ? 85 : 110),
+                
+                //resultsView
+                resultsView.leftAnchor.constraint(equalTo: leftAnchor),
+                resultsView.rightAnchor.constraint(equalTo: rightAnchor),
+                resultsView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                resultsView.topAnchor.constraint(equalTo: resultInputView.bottomAnchor)
                
                 
             ])

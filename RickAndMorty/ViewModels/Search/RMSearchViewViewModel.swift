@@ -15,6 +15,7 @@ final class RMSearchViewViewModel {
     private var optionMapUpdateBlock : ((RMSearchInputViewViewModel.DynamicOptions, String)->Void)?
     
     private var searchResultHandler : ((RMSearchResultType) -> Void)?
+    private var noSearchResultHandler : (() -> Void)?
     
     private var searchText : String = ""
     
@@ -49,6 +50,12 @@ final class RMSearchViewViewModel {
         self.searchResultHandler = block
     }
     
+    
+    func registerNoSearchResultHandler(_ block: @escaping () -> Void) {
+        self.noSearchResultHandler = block
+    }
+    
+    
     func executeSearch() {
         
         var queryParams : [URLQueryItem] = [URLQueryItem(name: "name", value: searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))]
@@ -71,10 +78,10 @@ final class RMSearchViewViewModel {
                 if let vm = RMSearchResultFactory(model: model).getViewModel() {
                     self?.searchResultHandler?(vm)
                 } else {
-                    //no result
+                    self?.noSearchResultHandler?()
                 }
             case .failure(let error):
-                break
+                self?.noSearchResultHandler?()
             }
         }
         

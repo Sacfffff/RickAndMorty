@@ -75,7 +75,7 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
                     self?.delegate?.rmDidGetLocations()
                 }
                 
-            case .failure(let failure):
+            case .failure(_):
                 break
             }
         }

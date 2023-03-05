@@ -51,7 +51,7 @@ final class RMEpisodeViewViewModel : RMEpisodeViewViewModelProtocol {
             switch result {
             case .success(let episode):
                 self?.fetchRelatedCharacters(episode: episode)
-            case .failure(let failure):
+            case .failure(_):
                 break
             }
         }

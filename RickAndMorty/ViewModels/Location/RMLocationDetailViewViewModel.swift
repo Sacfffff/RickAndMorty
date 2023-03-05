@@ -51,7 +51,7 @@ final class RMLocationDetailViewViewModel : RMLocationDetailViewViewModelProtoco
             switch result {
             case .success(let location):
                 self?.fetchRelatedCharacters(location: location)
-            case .failure(let failure):
+            case .failure(_):
                 break
             }
         }
