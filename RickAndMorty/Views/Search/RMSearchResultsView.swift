@@ -7,8 +7,18 @@
 
 import UIKit
 
+protocol RMSearchResultsViewDelegate : AnyObject {
+    
+    func rmSearchResultsView(_ resultView: RMSearchResultsView, didSelectLocationAt index: Int)
+    
+}
+
 /// Shows search results UI ( table or collection as needed)
 class RMSearchResultsView: UIView {
+    
+    weak var delegate : RMSearchResultsViewDelegate?
+    
+    private var locationCellViewModels : [RMLocationTableViewCellViewModel] = []
     
     private var viewModel : RMSearchResultType? {
         didSet {
@@ -42,6 +52,8 @@ class RMSearchResultsView: UIView {
     
     func update(with model: RMSearchResultType) {
         
+        self.viewModel = model
+        
     }
     
     
@@ -54,6 +66,8 @@ class RMSearchResultsView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(RMLocationTableViewCell.self, forCellReuseIdentifier: "\(RMLocationTableViewCell.self)")
         tableView.isHidden = true
+        tableView.delegate = self
+        tableView.dataSource = self
         
         self.addSubviews(tableView)
         
@@ -69,7 +83,7 @@ class RMSearchResultsView: UIView {
         case .characters(let charactersViewModel):
             self.setupCollectionView()
         case .locations(let locationViewModel):
-            self.setupTableView()
+            self.setupTableView(model: locationViewModel)
         case .episodes(let episodesViewModel):
             self.setupCollectionView()
         }
@@ -82,9 +96,11 @@ class RMSearchResultsView: UIView {
     }
     
     
-    private func setupTableView() {
+    private func setupTableView(model: [RMLocationTableViewCellViewModel]) {
         
+        self.locationCellViewModels = model
         self.tableView.isHidden = false
+        self.tableView.reloadData()
         
     }
     
@@ -103,4 +119,41 @@ class RMSearchResultsView: UIView {
         
     }
 
+}
+
+//MARK: - extension UITableViewDelegate
+
+extension RMSearchResultsView : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    
+        self.delegate?.rmSearchResultsView(self, didSelectLocationAt: indexPath.row)
+        
+    }
+    
+}
+
+//MARK: - extension UITableViewDataSource
+
+extension RMSearchResultsView : UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        locationCellViewModels.count
+        
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(RMLocationTableViewCell.self)", for: indexPath) as? RMLocationTableViewCell else { fatalError() }
+        
+        cell.update(with: locationCellViewModels[indexPath.row])
+        
+        return cell
+        
+    }
+    
+    
 }

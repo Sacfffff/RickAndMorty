@@ -62,6 +62,10 @@ class RMSearchViewController: UIViewController {
             vc.sheetPresentationController?.detents = [.medium()]
             self?.present(vc, animated: true)
         }
+        searchView.selectedLocation = { [weak self] location in
+            let vc = RMLocationDetailViewController(location: location)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
         view.addSubview(searchView)
         
     }

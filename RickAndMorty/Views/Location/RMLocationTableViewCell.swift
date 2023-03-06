@@ -51,6 +51,8 @@ class RMLocationTableViewCell: UITableViewCell {
     
     private func setup() {
         
+        self.backgroundColor = .secondarySystemBackground
+        
         name.translatesAutoresizingMaskIntoConstraints = false
         name.font = .systemFont(ofSize: 20, weight: .medium)
         

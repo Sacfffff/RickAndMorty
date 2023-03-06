@@ -10,6 +10,7 @@ import UIKit
 final class RMSearchView: UIView {
 
     var selectedOption : ((RMSearchInputViewViewModel.DynamicOptions) -> Void)?
+    var selectedLocation : ((RMLocation) -> Void)?
     
     private let viewModel : RMSearchViewViewModel
     
@@ -25,6 +26,7 @@ final class RMSearchView: UIView {
         setup()
     }
     
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -37,9 +39,11 @@ final class RMSearchView: UIView {
         
     }
     
+    
     func presentKeyboard() {
         resultInputView.presentKeyboard()
     }
+    
     
     private func setup() {
         
@@ -49,9 +53,13 @@ final class RMSearchView: UIView {
         resultInputView.delegate = self
         resultInputView.update(with: .init(type: viewModel.config.type))
         
+        
+        resultsView.delegate = self
+        
         self.setupHandlers()
         
         self.addSubviews(resultsView, noResultView, resultInputView)
+        
     }
     
     
@@ -106,7 +114,7 @@ final class RMSearchView: UIView {
     
 }
 
-//MARK: - UICollectionViewDelegate
+//MARK: -  extension UICollectionViewDelegate
 
 extension RMSearchView : UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -114,7 +122,7 @@ extension RMSearchView : UICollectionViewDelegate {
     }
 }
 
-//MARK: - UICollectionViewDataSource
+//MARK: -extension  UICollectionViewDataSource
 
 extension RMSearchView : UICollectionViewDataSource {
     
@@ -130,7 +138,7 @@ extension RMSearchView : UICollectionViewDataSource {
     
 }
 
-//MARK: - RMSearchInputViewDelegate
+//MARK: - extension RMSearchInputViewDelegate
 
 extension RMSearchView : RMSearchInputViewDelegate {
     
@@ -158,3 +166,17 @@ extension RMSearchView : RMSearchInputViewDelegate {
     
 }
 
+//MARK: - RMSearchInputViewDelegate
+
+extension RMSearchView : RMSearchResultsViewDelegate {
+    
+    func rmSearchResultsView(_ resultView: RMSearchResultsView, didSelectLocationAt index: Int) {
+        
+        guard let locationModel = viewModel.locationSearchResults(at: index) else { return }
+        
+        self.selectedLocation?(locationModel)
+        
+    }
+    
+    
+}

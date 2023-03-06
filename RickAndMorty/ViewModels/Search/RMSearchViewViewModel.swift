@@ -19,8 +19,19 @@ final class RMSearchViewViewModel {
     
     private var searchText : String = ""
     
+    private var searcResultsModel : Codable?
+    
     init(config: RMSearchViewController.Config) {
         self.config = config
+    }
+    
+    
+    func locationSearchResults(at index: Int) -> RMLocation? {
+        
+        guard let locationModel = searcResultsModel as? RMGetAllLocationsResponce else { return nil }
+        
+        return locationModel.results[index]
+        
     }
     
     
@@ -76,11 +87,12 @@ final class RMSearchViewViewModel {
             switch result {
             case .success(let model):
                 if let vm = RMSearchResultFactory(model: model).getViewModel() {
+                    self?.searcResultsModel = model
                     self?.searchResultHandler?(vm)
                 } else {
                     self?.noSearchResultHandler?()
                 }
-            case .failure(let error):
+            case .failure(_):
                 self?.noSearchResultHandler?()
             }
         }
