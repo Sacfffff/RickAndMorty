@@ -79,6 +79,7 @@ final class RMLocationListView: UIView {
         addSubviews(tableView, spinner)
     }
     
+    
     private func setupConstraints() {
         
         NSLayoutConstraint.activate(
@@ -134,5 +135,42 @@ extension RMLocationListView : UITableViewDataSource {
 
     }
     
+    
+}
+
+//MARK: - UIScrollViewDelegate
+
+extension RMLocationListView : UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let viewModel,
+              !viewModel.cellViewModels.isEmpty,
+              viewModel.hasMoreResults else { return }
+        
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] t in
+            let offset = scrollView.contentOffset.y
+            let totalContentHeight = scrollView.contentSize.height
+            let totalScrollViewFixedHeight = scrollView.frame.size.height
+            let footerHeightPlusBuffer : CGFloat = 120
+            
+            if offset >= (totalContentHeight - totalScrollViewFixedHeight - footerHeightPlusBuffer) {
+                DispatchQueue.main.async {
+                    self?.showLoadingIndicator()
+                }
+                self?.viewModel?.getAdditionalLocations()
+               
+            }
+            
+            t.invalidate()
+        }
+    }
+
+    
+    private func showLoadingIndicator() {
+        
+        let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
+        tableView.tableFooterView = footer
+        
+    }
     
 }

@@ -11,8 +11,10 @@ protocol RMLocationListViewViewModelProtocol {
     
     var delegate : RMLocationListViewViewModelDelegate? {get set}
     var cellViewModels : [RMLocationTableViewCellViewModel]{get}
-      
+    var hasMoreResults : Bool {get}
+    
     func getLocations()
+    func getAdditionalLocations()
     func location(at index: Int) -> RMLocation?
     
 }
@@ -27,6 +29,10 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
     weak var delegate : RMLocationListViewViewModelDelegate?
     
     var cellViewModels : [RMLocationTableViewCellViewModel] = []
+    
+    var hasMoreResults : Bool {
+        return apiInfo?.next != nil && !isLoadingMoreLocations
+    }
     
     private var locations : [RMLocation] = [] {
         
@@ -46,9 +52,7 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
     
     private var apiInfo : RMGetAllLocationssResponceInfo?
     
-    private var hasMoreResults : Bool {
-        return false
-    }
+    private var isLoadingMoreLocations : Bool = false
     
     init() {
         
@@ -79,6 +83,39 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
                 break
             }
         }
+    }
+    
+    
+    /// Paginate if additional locations are needed
+    func getAdditionalLocations() {
+        
+        guard !isLoadingMoreLocations, let nextUrlString = apiInfo?.next, let url = URL(string: nextUrlString) else { return }
+        
+        isLoadingMoreLocations = true
+        
+        guard let request = RMRequest(url: url) else {
+            isLoadingMoreLocations = false
+            return
+        }
+        
+        RMService.shared.execute(request, expecting: RMGetAllLocationsResponce.self) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+                
+            case .success(let model):
+                let moreResults = model.results
+                self.apiInfo = model.info
+                self.cellViewModels.append(contentsOf: moreResults.compactMap { RMLocationTableViewCellViewModel(location: $0) })
+                
+                DispatchQueue.main.async {
+                    self.isLoadingMoreLocations = false
+                }
+            case .failure(_):
+                self.isLoadingMoreLocations = false
+            }
+        }
+        
     }
     
 }

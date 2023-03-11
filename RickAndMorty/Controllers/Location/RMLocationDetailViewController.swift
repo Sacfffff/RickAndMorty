@@ -15,11 +15,13 @@ final class RMLocationDetailViewController: UIViewController {
     private var viewModel : RMLocationDetailViewViewModel
     private var detailView : RMLocationDetailView = RMLocationDetailView()
 
-    init(location: RMLocation){
+    init(location: RMLocation) {
+        
         self.location = location
         let url = URL(string: location.url)
         viewModel = RMLocationDetailViewViewModel(url: url)
         super.init(nibName: nil, bundle: nil)
+        
     }
     
     required init?(coder: NSCoder) {
