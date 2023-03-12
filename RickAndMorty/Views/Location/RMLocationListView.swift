@@ -32,6 +32,13 @@ final class RMLocationListView: UIView {
                 self.tableView.alpha = 1
             }
             
+            viewModel?.registerPaginationDidFinishBlock({ [weak self] in
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                    self?.tableView.tableFooterView = nil
+                }
+            })
+            
         }
         
     }
@@ -77,6 +84,7 @@ final class RMLocationListView: UIView {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         
         addSubviews(tableView, spinner)
+        
     }
     
     
@@ -95,6 +103,7 @@ final class RMLocationListView: UIView {
                 tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
                 tableView.leftAnchor.constraint(equalTo: leftAnchor),
                 tableView.rightAnchor.constraint(equalTo: rightAnchor),
+                
             ])
     }
 

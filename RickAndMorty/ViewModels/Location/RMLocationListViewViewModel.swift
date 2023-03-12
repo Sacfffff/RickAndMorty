@@ -16,6 +16,7 @@ protocol RMLocationListViewViewModelProtocol {
     func getLocations()
     func getAdditionalLocations()
     func location(at index: Int) -> RMLocation?
+    func registerPaginationDidFinishBlock(_ block: @escaping (()->Void))
     
 }
 
@@ -33,6 +34,8 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
     var hasMoreResults : Bool {
         return apiInfo?.next != nil && !isLoadingMoreLocations
     }
+    
+    private var didFinishPagination : (()->Void)?
     
     private var locations : [RMLocation] = [] {
         
@@ -54,15 +57,18 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
     
     private var isLoadingMoreLocations : Bool = false
     
-    init() {
-        
-    }
-    
     func location(at index: Int) -> RMLocation? {
         
         guard !(index >= locations.count) else { return nil}
         
         return self.locations[index]
+        
+    }
+    
+    
+    func registerPaginationDidFinishBlock(_ block: @escaping (()->Void)) {
+        
+        self.didFinishPagination = block
         
     }
     
@@ -106,9 +112,10 @@ final class RMLocationListViewViewModel : RMLocationListViewViewModelProtocol {
             case .success(let model):
                 let moreResults = model.results
                 self.apiInfo = model.info
-                self.cellViewModels.append(contentsOf: moreResults.compactMap { RMLocationTableViewCellViewModel(location: $0) })
+                self.locations.append(contentsOf: moreResults)
                 
                 DispatchQueue.main.async {
+                    self.didFinishPagination?()
                     self.isLoadingMoreLocations = false
                 }
             case .failure(_):
