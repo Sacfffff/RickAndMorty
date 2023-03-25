@@ -30,4 +30,5 @@ struct RMGetAllCharactersResponceInfo : Codable {
     let pages : Int
     let next : String?
     let prev : String?
+    
 }
