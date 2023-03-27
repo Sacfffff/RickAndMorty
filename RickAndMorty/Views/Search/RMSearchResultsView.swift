@@ -182,6 +182,24 @@ extension RMSearchResultsView :  UICollectionViewDataSource, UICollectionViewDel
         collectionView.deselectItem(at: indexPath, animated: true)
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter,
+              let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "\(RMFooterLoadingCollectionReusableView.self)", for: indexPath) as? RMFooterLoadingCollectionReusableView else { fatalError("unsupported") }
+        
+        if let viewModel, viewModel.hasMoreResults {
+            footer.startAnimating()
+        }
+        
+        return footer
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard let viewModel, viewModel.hasMoreResults else { return .zero }
+        return CGSize(width: collectionView.frame.width, height: 100)
+    }
+    
    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
@@ -239,6 +257,26 @@ extension RMSearchResultsView : UITableViewDataSource, UITableViewDelegate {
 extension RMSearchResultsView : UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      
+        if !locationCellViewModels.isEmpty {
+            handleLocationsPaginations(scrollView: scrollView)
+        } else {
+            
+        }
+       
+    }
+
+    
+    private func showTableViewLoadingIndicator() {
+        
+        let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
+        tableView.tableFooterView = footer
+        
+    }
+    
+    
+    private func handleLocationsPaginations(scrollView: UIScrollView) {
+        
         guard let viewModel,
               !locationCellViewModels.isEmpty,
               viewModel.hasMoreResults else { return }
@@ -251,7 +289,7 @@ extension RMSearchResultsView : UIScrollViewDelegate {
             
             if offset >= (totalContentHeight - totalScrollViewFixedHeight - footerHeightPlusBuffer) {
                 DispatchQueue.main.async {
-                    self?.showLoadingIndicator()
+                    self?.showTableViewLoadingIndicator()
                 }
                 self?.viewModel?.getAdditionalLocations { newResults in
                     self?.tableView.tableFooterView = nil
@@ -264,15 +302,35 @@ extension RMSearchResultsView : UIScrollViewDelegate {
             t.invalidate()
             
         }
-       
+        
     }
-
     
-    private func showLoadingIndicator() {
+    private func handleCollectionViewPaginations(scrollView: UIScrollView) {
         
-        let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
-        tableView.tableFooterView = footer
+        guard let viewModel,
+              !collectionsCellViewModels.isEmpty,
+              viewModel.hasMoreResults else { return }
+        
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] t in
+            let offset = scrollView.contentOffset.y
+            let totalContentHeight = scrollView.contentSize.height
+            let totalScrollViewFixedHeight = scrollView.frame.size.height
+            let footerHeightPlusBuffer : CGFloat = 120
+            
+            if offset >= (totalContentHeight - totalScrollViewFixedHeight - footerHeightPlusBuffer) {
+                self?.viewModel?.getAdditionalResults { newResults in
+                    self?.collectionsCellViewModels = newResults
+                    self?.collectionView.reloadData()
+                }
+                
+            }
+            
+            t.invalidate()
+            
+        }
+
         
     }
+    
     
 }

@@ -73,4 +73,66 @@ final class RMSearchResultViewModel {
         
     }
     
+    
+    func getAdditionalResults(completion: @escaping (([any Hashable]) -> Void)) {
+        
+        guard !isLoadingMoreResults, let nextUrlString = next, let url = URL(string: nextUrlString) else { return }
+        
+        isLoadingMoreResults = true
+        
+        guard let request = RMRequest(url: url) else {
+            isLoadingMoreResults = false
+            return
+        }
+        
+        switch result {
+        case .characters(let currentResult):
+            RMService.shared.execute(request, expecting: RMGetAllCharactersResponce.self) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                    
+                case .success(let model):
+                    let additionalResults = model.results.compactMap { RMCharactersCollectionViewCellViewModel(characterName: $0.name, characterStatus: $0.status, characterImageURL: URL(string: $0.image)) }
+                    self.next = model.info.next
+                    var newResults : [RMCharactersCollectionViewCellViewModel] = []
+                    newResults = currentResult + additionalResults
+                    self.result = .characters(newResults)
+                    DispatchQueue.main.async {
+                        completion(newResults)
+                        self.isLoadingMoreResults = false
+                    }
+                case .failure(_):
+                    self.isLoadingMoreResults = false
+                }
+            }
+        case .episodes(let currentResult):
+            RMService.shared.execute(request, expecting: RMGetAllEpisodesResponce.self) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                    
+                case .success(let model):
+                    let additionalResults = model.results.compactMap { RMCharacterEpisodeCellViewModel(episodeDataURL: URL(string: $0.url))}
+                    self.next = model.info.next
+                    var newResults : [RMCharacterEpisodeCellViewModel] = []
+                    newResults = currentResult + additionalResults
+                    self.result = .episodes(newResults)
+                    DispatchQueue.main.async {
+                        completion(newResults)
+                        self.isLoadingMoreResults = false
+                    }
+                case .failure(_):
+                    self.isLoadingMoreResults = false
+                }
+
+            }
+        default: break
+        }
+        
+        
+    }
+
+    
+    
 }
