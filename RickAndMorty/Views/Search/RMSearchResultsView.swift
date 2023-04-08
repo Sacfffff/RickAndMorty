@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 protocol RMSearchResultsViewDelegate : AnyObject {
     
@@ -261,7 +262,7 @@ extension RMSearchResultsView : UIScrollViewDelegate {
         if !locationCellViewModels.isEmpty {
             handleLocationsPaginations(scrollView: scrollView)
         } else {
-            
+            handleCollectionViewPaginations(scrollView: scrollView)
         }
        
     }
@@ -319,8 +320,27 @@ extension RMSearchResultsView : UIScrollViewDelegate {
             
             if offset >= (totalContentHeight - totalScrollViewFixedHeight - footerHeightPlusBuffer) {
                 self?.viewModel?.getAdditionalResults { newResults in
-                    self?.collectionsCellViewModels = newResults
-                    self?.collectionView.reloadData()
+                    if let self {
+                        
+                        DispatchQueue.main.async {
+                            
+                            self.tableView.tableFooterView = nil
+                            
+                            let originalCount = self.collectionsCellViewModels.count
+                            let newCount = newResults.count - originalCount
+                            let total = newCount + originalCount
+                            let startingIndex = total - newCount
+                            let indexPathsToAdd : [IndexPath] = Array(startingIndex..<(startingIndex + newCount))
+                                .compactMap{ IndexPath(row: $0, section: 0) }
+                            
+                            self.collectionsCellViewModels = newResults
+                            self.collectionView.insertItems(at: indexPathsToAdd)
+                            self.collectionView.reloadData()
+                            
+                        }
+                        
+                    }
+                    
                 }
                 
             }
