@@ -218,17 +218,17 @@ extension RMEpisodeDetailView {
     
     private func createCharactersLayout() -> NSCollectionLayoutSection {
         
-        var width : CGFloat = 0.5
+        var width : CGFloat = UIDevice.isIPhone ? 0.5 : 0.25
         var height : CGFloat = 1
         
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(width), heightDimension: .fractionalHeight(height)))
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8)
         
-        height = 260
+        height = UIDevice.isIPhone ? 260 : 320
         width = 1.0
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(width), heightDimension: .absolute(height)),
-                                                     subitems: [item, item])
+                                                       subitems: UIDevice.isIPhone ? [item, item] : [item, item, item, item])
         
         let section = NSCollectionLayoutSection(group: group)
         

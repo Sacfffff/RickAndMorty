@@ -138,7 +138,7 @@ extension RMCharacterViewViewModel {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+        let isIphone = UIDevice.isIPhone
         let bounds = collectionView.bounds
         let width : CGFloat = isIphone ? (bounds.width - 30) / 2 : (bounds.width - 50) / 4
         return CGSize(width: width, height: width * 1.5)

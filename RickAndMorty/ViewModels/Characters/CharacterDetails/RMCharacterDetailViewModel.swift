@@ -93,7 +93,7 @@ final class RMCharacterDetailViewModel : RMCharacterDetailViewViewModelProtocol 
     
     func createInformationSectionLayout() -> NSCollectionLayoutSection {
         
-        var width : CGFloat = 0.5
+        var width : CGFloat = UIDevice.isIPhone ? 0.5 : 0.33
         var height : CGFloat = 1
         
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(width), heightDimension: .fractionalHeight(height)))
@@ -103,7 +103,7 @@ final class RMCharacterDetailViewModel : RMCharacterDetailViewViewModelProtocol 
         width = 1.0
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(width), heightDimension: .absolute(height)),
-                                                     subitems: [item, item])
+                                                       subitems: UIDevice.isIPhone ? [item, item] : [item, item, item, item])
         
         let section = NSCollectionLayoutSection(group: group)
         
@@ -119,7 +119,7 @@ final class RMCharacterDetailViewModel : RMCharacterDetailViewViewModelProtocol 
         item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 5, bottom: 10, trailing: 8)
         
         height = 150
-        width = 0.8
+        width = UIDevice.isIPhone ? 0.8 : 0.4
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(width), heightDimension: .absolute(height)),
                                                      subitems: [item])

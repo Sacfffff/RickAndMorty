@@ -209,7 +209,7 @@ extension RMSearchResultsView :  UICollectionViewDataSource, UICollectionViewDel
         let height : CGFloat
         
         if collectionsCellViewModels[indexPath.row] is RMCharactersCollectionViewCellViewModel {
-            width = (bounds.width - 30) / 2
+            width = UIDevice.isIPhone ? (bounds.width - 30) / 2 : (bounds.width - 30) / 4
             height = width * 1.5
             
         } else {
