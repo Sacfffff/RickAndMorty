@@ -34,6 +34,23 @@ final class RMSearchViewViewModel {
         
     }
     
+    func episodeSearchResults(at index: Int) -> RMEpisode? {
+        
+        guard let episodeModel = searcResultsModel as? RMGetAllEpisodesResponce else { return nil }
+        
+        return episodeModel.results[index]
+        
+    }
+    
+    
+    func characterSearchResults(at index: Int) -> RMCharacter? {
+        
+        guard let characterModel = searcResultsModel as? RMGetAllCharactersResponce else { return nil }
+        
+        return characterModel.results[index]
+        
+    }
+    
     
     func set(query text: String) {
         

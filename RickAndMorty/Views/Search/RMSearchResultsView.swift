@@ -8,9 +8,13 @@
 import UIKit
 import Foundation
 
+
+/// Interface to relay location view  events
 protocol RMSearchResultsViewDelegate : AnyObject {
     
     func rmSearchResultsView(_ resultView: RMSearchResultsView, didSelectLocationAt index: Int)
+    func rmSearchResultsView(_ resultView: RMSearchResultsView, didSelectEpisodeAt index: Int)
+    func rmSearchResultsView(_ resultView: RMSearchResultsView, didSelectCharacterAt index: Int)
     
 }
 
@@ -181,6 +185,17 @@ extension RMSearchResultsView :  UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        
+        guard let viewModel else { return }
+        switch viewModel.result {
+        case .characters:
+            delegate?.rmSearchResultsView(self, didSelectCharacterAt: indexPath.row)
+        case .episodes:
+            delegate?.rmSearchResultsView(self, didSelectEpisodeAt: indexPath.row)
+        case .locations:
+            break
+        }
+        
     }
     
     
@@ -268,14 +283,6 @@ extension RMSearchResultsView : UIScrollViewDelegate {
     }
 
     
-    private func showTableViewLoadingIndicator() {
-        
-        let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
-        tableView.tableFooterView = footer
-        
-    }
-    
-    
     private func handleLocationsPaginations(scrollView: UIScrollView) {
         
         guard let viewModel,
@@ -289,9 +296,8 @@ extension RMSearchResultsView : UIScrollViewDelegate {
             let footerHeightPlusBuffer : CGFloat = 120
             
             if offset >= (totalContentHeight - totalScrollViewFixedHeight - footerHeightPlusBuffer) {
-                DispatchQueue.main.async {
-                    self?.showTableViewLoadingIndicator()
-                }
+                self?.showTableViewLoadingIndicator()
+                
                 self?.viewModel?.getAdditionalLocations { newResults in
                     self?.tableView.tableFooterView = nil
                     self?.locationCellViewModels = newResults
@@ -305,6 +311,16 @@ extension RMSearchResultsView : UIScrollViewDelegate {
         }
         
     }
+    
+    
+    private func showTableViewLoadingIndicator() {
+        
+        let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
+        tableView.tableFooterView = footer
+        tableView.setContentOffset(CGPoint(x: 0, y: tableView.contentSize.height), animated: true)
+        
+    }
+    
     
     private func handleCollectionViewPaginations(scrollView: UIScrollView) {
         

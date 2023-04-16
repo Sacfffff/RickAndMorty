@@ -14,8 +14,8 @@
             filePath = "RickAndMorty/Views/Search/RMSearchResultsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "321"
-            endingLineNumber = "321"
+            startingLineNumber = "337"
+            endingLineNumber = "337"
             landmarkName = "handleCollectionViewPaginations(scrollView:)"
             landmarkType = "7">
          </BreakpointContent>

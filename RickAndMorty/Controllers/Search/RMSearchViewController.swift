@@ -66,6 +66,14 @@ class RMSearchViewController: UIViewController {
             let vc = RMLocationDetailViewController(location: location)
             self?.navigationController?.pushViewController(vc, animated: true)
         }
+        searchView.selectedEpisode = { [weak self] episode in
+            let vc = RMEpisodeDetailViewController(url: URL(string: episode.url))
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        searchView.selectedCharacter = { [weak self] character in
+            let vc = RMCharacterDetailViewController(viewModel: RMCharacterDetailViewModel(character: character))
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
         view.addSubview(searchView)
         
     }

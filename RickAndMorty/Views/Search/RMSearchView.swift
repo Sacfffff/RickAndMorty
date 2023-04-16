@@ -11,6 +11,8 @@ final class RMSearchView: UIView {
 
     var selectedOption : ((RMSearchInputViewViewModel.DynamicOptions) -> Void)?
     var selectedLocation : ((RMLocation) -> Void)?
+    var selectedEpisode : ((RMEpisode) -> Void)?
+    var selectedCharacter : ((RMCharacter) -> Void)?
     
     private let viewModel : RMSearchViewViewModel
     
@@ -175,6 +177,24 @@ extension RMSearchView : RMSearchResultsViewDelegate {
         guard let locationModel = viewModel.locationSearchResults(at: index) else { return }
         
         self.selectedLocation?(locationModel)
+        
+    }
+    
+    
+    func rmSearchResultsView(_ resultView: RMSearchResultsView, didSelectCharacterAt index: Int) {
+        
+        guard let characterModel = viewModel.characterSearchResults(at: index) else { return }
+        
+        self.selectedCharacter?(characterModel)
+        
+    }
+    
+    
+    func rmSearchResultsView(_ resultView: RMSearchResultsView, didSelectEpisodeAt index: Int) {
+        
+        guard let episodeModel = viewModel.episodeSearchResults(at: index) else { return }
+        
+        self.selectedEpisode?(episodeModel)
         
     }
     
